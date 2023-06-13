@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -13,7 +15,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Button goToRegisterBtn = findViewById(R.id.goToRegisterBtn);
+        LinearLayout goToRegisterBtn = findViewById(R.id.goToRegisterBtn);
         goToRegisterBtn.setOnClickListener(view -> {
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivity(intent);

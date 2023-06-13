@@ -13,8 +13,11 @@
     <string name="sign_up">הירשם</string>
 
     <string name="login">התחבר</string>
-    <string name="not_signed_up">לא רשום? לחץ כאן כדי להירשם</string>
+    <string name="not_signed_up">אין לך משתמש עדיין?</string>
+    <string name="not_signed_up_second">הירשם</string>
     <string name="upload_with">העלה באמצעות:</string>
+    <string name="username_hint">הכנס שם משתמש</string>
+    <string name="password_hint">הכנס סיסמא</string>
 
 
 
