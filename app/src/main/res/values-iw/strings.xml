@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ap2-Ex3</string>
+    <string name="passwordTVLogin">סיסמא</string>
+    <string name="nameTVLogin">שם משתמש</string>
+
+    <string name="nameTVregister">שם משתמש</string>
+    <string name="passwordTVregister">סיסמא</string>
+    <string name="verify_passwordTVregister">ווידוא סיסמא</string>
+    <string name="display_nameTVregister">כינוי</string>
+    <string name="pictureTVregister">תמונה</string>
+    <string name="upload_profile_picture">העלה תמונת פרופיל</string>
+    <string name="sign_up">הירשם</string>
+
+    <string name="login">התחבר</string>
+    <string name="not_signed_up">לא רשום? לחץ כאן כדי להירשם</string>
+    <string name="upload_with">העלה באמצעות:</string>
+
+
+
+</resources>

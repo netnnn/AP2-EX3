@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name"
+                android:text="@string/nameTVregister"
                 android:layout_marginStart="15dp"
                 android:textSize="17dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Password"
+                android:text="@string/passwordTVregister"
                 android:textSize="17dp"
                 android:layout_marginStart="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +77,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Verify password"
+                android:text="@string/verify_passwordTVregister"
                 android:textSize="17dp"
                 android:layout_marginStart="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +100,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Display name"
+                android:text="@string/display_nameTVregister"
                 android:textSize="17dp"
                 android:layout_marginStart="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +122,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Picture"
+                    android:text="@string/pictureTVregister"
                     android:textSize="17dp"
                     android:layout_marginStart="15dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -131,8 +131,8 @@
 
                 <ImageView
                     android:id="@+id/profileIv"
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_gravity="center"
                     />
 
@@ -144,7 +144,7 @@
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/ic_addpicture"
-                    android:text="Upload profile picture"
+                    android:text="@string/upload_profile_picture"
                     />
 
             </LinearLayout>
@@ -155,7 +155,7 @@
             android:id="@+id/signUpBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign up"/>
+            android:text="@string/sign_up"/>
 
     </LinearLayout>
 
