@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="greenBackground">#349875</color>
     <color name="formBackground">#F01A2537</color>
+    <color name="chatTileBackground">#F01A2537</color>
+    <color name="lastMessage">#D7878787</color>
 </resources>

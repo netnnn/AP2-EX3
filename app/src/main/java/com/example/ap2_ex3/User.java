@@ -10,9 +10,17 @@ public class User {
     private String username = "";
     private String password = "";
     private String displayName = "";
-    private Uri pictureBase64 = null;
+    private int picture;
 
     private List<Chat> chatList;
+
+    public User(int id, String username, String password, String displayName, int picture) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.displayName = displayName;
+        this.picture = picture;
+    }
 
     public String getUsername() {
         return username;
@@ -38,11 +46,11 @@ public class User {
         this.displayName = displayName;
     }
 
-    public Uri getPictureBase64() {
-        return pictureBase64;
+    public int getPicture() {
+        return picture;
     }
 
-    public void setPictureBase64(Uri pictureBase64) {
-        this.pictureBase64 = pictureBase64;
+    public void setPictureBase64(int picture) {
+        this.picture = picture;
     }
 }
