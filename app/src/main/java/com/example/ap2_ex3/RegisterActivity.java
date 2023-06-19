@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -83,6 +84,25 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         });
+
+        Button registerBtn = findViewById(R.id.signUpBtn);
+        registerBtn.setOnClickListener(view -> {
+            EditText usernameEt = findViewById(R.id.usernameEt);
+            EditText PasswordEt = findViewById(R.id.PasswordEt);
+            EditText DisplayNameEt = findViewById(R.id.DisplayNameEt);
+            ImageView profileIv = findViewById(R.id.profileIv);
+
+            String username = usernameEt.getText().toString();
+            String password = PasswordEt.getText().toString();
+            String displayName = DisplayNameEt.getText().toString();
+            //profileIv.getDrawable();
+
+            User newUser = new User(0, username, password, displayName, 3);
+            LocalData.users.add(newUser);
+
+            finish();
+        });
+
     }
 
 

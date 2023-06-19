@@ -92,7 +92,7 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                     <EditText
-                        android:id="@+id/PasswordEtLogin"
+                        android:id="@+id/passwordEtLogin"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:hint="@string/password_hint"
