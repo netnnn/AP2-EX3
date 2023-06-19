@@ -2,6 +2,7 @@ package com.example.ap2_ex3;
 
 import android.net.Uri;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -20,6 +21,7 @@ public class User {
         this.password = password;
         this.displayName = displayName;
         this.picture = picture;
+        this.chatList = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -48,6 +50,14 @@ public class User {
 
     public int getPicture() {
         return picture;
+    }
+
+    public List<Chat> getChatList() {
+        return chatList;
+    }
+
+    public void setChatList(List<Chat> chatList) {
+        this.chatList = chatList;
     }
 
     public void setPictureBase64(int picture) {

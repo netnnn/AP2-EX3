@@ -40,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private List<Message> generateMessages() {
-        User userOne = new User(1, "userOne", "password1", "displayName1", 2);
+        User userOne = new User(1, "userOne", "password1", "displayName1", R.drawable.misa);
         User userTwo = new User(1, "userTwo", "password2", "displayName2", 3);
         Date date = new Date();
         List<Message> messages = new ArrayList<>();
