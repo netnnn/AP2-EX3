@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
@@ -20,6 +22,12 @@ public class LoginActivity extends AppCompatActivity {
         Button LoginBtn = findViewById(R.id.LoginBtn);
         EditText usernameEtLogin = findViewById(R.id.usernameEtLogin);
         EditText passwordEtLogin = findViewById(R.id.passwordEtLogin);
+
+        FloatingActionButton settingsBtn = findViewById(R.id.settingsButton);
+        settingsBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
         LinearLayout goToRegisterBtn = findViewById(R.id.goToRegisterBtn);
         goToRegisterBtn.setOnClickListener(view -> {

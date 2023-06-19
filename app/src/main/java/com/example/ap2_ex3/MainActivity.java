@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
+
+        FloatingActionButton settingsBtn = findViewById(R.id.settingsButton);
+        settingsBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
         Intent intent = getIntent();
         User currentUser = LocalData.getUserByName(intent.getStringExtra("user"));

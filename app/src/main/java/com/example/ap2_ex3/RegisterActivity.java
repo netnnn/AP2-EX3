@@ -26,6 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST_CODE = 1001;
@@ -36,6 +38,12 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        FloatingActionButton settingsBtn = findViewById(R.id.settingsButton);
+        settingsBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
+        });
 
         Button uploadPicBtn = findViewById(R.id.uploadProfileBtn);
         uploadPicBtn.setOnClickListener(view -> {
