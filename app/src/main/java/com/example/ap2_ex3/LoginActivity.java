@@ -17,6 +17,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        LocalData.initialize();
+
         Button LoginBtn = findViewById(R.id.LoginBtn);
         EditText usernameEtLogin = findViewById(R.id.usernameEtLogin);
         EditText passwordEtLogin = findViewById(R.id.passwordEtLogin);
@@ -41,28 +44,5 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
-
-        LocalData.users.add(new User(0, "yagami", "yyy", "Light", R.drawable.yagami));
-        LocalData.users.add(new User(1, "L", "lll", "L", R.drawable.lprofile));
-        LocalData.users.add(new User(2, "watari", "www", "watari", R.drawable.watari));
-        LocalData.users.add(new User(3, "misa", "mmm", "misa-misa", R.drawable.misa));
-        LocalData.users.add(new User(4, "matsuda", "mmm", "matsuda", R.drawable.matsuda));
-
-        User yagami = LocalData.users.get(0);
-        User L = LocalData.users.get(1);
-        User watari = LocalData.users.get(2);
-        User misa = LocalData.users.get(3);
-        User matsuda = LocalData.users.get(4);
-
-        yagami.getChatList().add(new Chat(1, yagami, L, new ArrayList<>()));
-        yagami.getChatList().add(new Chat(1, yagami, misa, new ArrayList<>()));
-
-        misa.getChatList().add(new Chat(1, misa, yagami, new ArrayList<>()));
-        misa.getChatList().add(new Chat(1, misa, L, new ArrayList<>()));
-
-        watari.getChatList().add(new Chat(1, watari, L, new ArrayList<>()));
-        watari.getChatList().add(new Chat(1, watari, matsuda, new ArrayList<>()));
-
-
     }
 }

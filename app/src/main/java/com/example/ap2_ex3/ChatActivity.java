@@ -2,6 +2,7 @@ package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +27,11 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea);
 
-        messages = generateMessages();
+        Intent intent = getIntent();
+        String myUsername = intent.getStringExtra("name");
+        int position = intent.getIntExtra("position", 0);
+
+        messages = LocalData.getUserByName(myUsername).getChatList().get(position).getMsgList();
         final MessageAdapter messageAdapter = new MessageAdapter(messages);
         lstFeed.setAdapter(messageAdapter);
 

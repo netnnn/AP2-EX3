@@ -87,6 +87,8 @@ public class ChatAdapter extends BaseAdapter {
 
         viewHolder.chatTile.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ChatActivity.class);
+            intent.putExtra("name", currentUser.getUsername());
+            intent.putExtra("position", position);
             v.getContext().startActivity(intent);
         });
 

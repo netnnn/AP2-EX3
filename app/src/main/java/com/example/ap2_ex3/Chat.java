@@ -1,5 +1,6 @@
 package com.example.ap2_ex3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Chat {
@@ -19,6 +20,9 @@ public class Chat {
         this.userOne = userOne;
         this.userTwo = userTwo;
         this.msgList = msgList;
+        if (this.msgList == null){
+            this.msgList = new ArrayList<>();
+        }
     }
 
     public void setLastMessage(String lastMessage) {
