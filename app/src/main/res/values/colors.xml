@@ -6,5 +6,7 @@
     <color name="formBackground">#D5D5D5</color>
     <color name="chatTileBackground">#FFFFFFFF</color>
     <color name="lastMessage">#D7000000</color>
+    <color name="messageTileBackground">#FFFFFFFF</color>
+    <color name="content">#D7000000</color>
 
 </resources>
