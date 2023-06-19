@@ -3,9 +3,15 @@ package com.example.ap2_ex3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +29,12 @@ public class ChatActivity extends AppCompatActivity {
         messages = generateMessages();
         final MessageAdapter messageAdapter = new MessageAdapter(messages);
         lstFeed.setAdapter(messageAdapter);
+
+        EditText newMsg = findViewById(R.id.enterMessage);
+        FloatingActionButton sendButton = findViewById(R.id.sendButton);
+        sendButton.setOnClickListener(view -> {
+            messages.add(new Message(5, new Date(), newMsg.getText().toString(), new User(1, "userOne", "password1", "displayName1", 2)));
+        });
     }
 
     private List<Message> generateMessages() {
