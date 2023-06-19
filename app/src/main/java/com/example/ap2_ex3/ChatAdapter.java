@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import java.util.List;
 
 public class ChatAdapter extends BaseAdapter {
@@ -81,7 +83,8 @@ public class ChatAdapter extends BaseAdapter {
         viewHolder.timeSent.setText(hours.toString() + ":" + minutes.toString());//check the toString
 
         viewHolder.chatTile.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), "Clicked on chat Tile", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(v.getContext(), ChatActivity.class);
+            v.getContext().startActivity(intent);
         });
 
         return convertView;
