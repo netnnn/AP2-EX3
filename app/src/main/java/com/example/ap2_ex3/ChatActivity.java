@@ -33,7 +33,9 @@ public class ChatActivity extends AppCompatActivity {
         EditText newMsg = findViewById(R.id.enterMessage);
         FloatingActionButton sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(view -> {
+
             messages.add(new Message(5, new Date(), newMsg.getText().toString(), new User(1, "userOne", "password1", "displayName1", 2)));
+            messageAdapter.notifyDataSetChanged();
         });
     }
 
