@@ -2,6 +2,7 @@ package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,22 +17,26 @@ public class MainActivity extends AppCompatActivity {
 
     List<Chat> chats;
 
+    private ChatsViewModel chatsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
 
-        chats = generateChats();
-        final ChatAdapter chatAdapter = new ChatAdapter(chats);
+        Intent intent = getIntent();
+        User currentUser = LocalData.getUserByName(intent.getStringExtra("user"));
+        chats = currentUser.getChatList();
+        if (chats == null) {
+            chats = new ArrayList<>();
+        }
+        final ChatAdapter chatAdapter = new ChatAdapter(chats, currentUser);
         lstFeed.setAdapter(chatAdapter);
-        lstFeed.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Chat c = chats.get(position);
-                c.select();
-                chatAdapter.notifyDataSetChanged();
-            }
+        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
+            Chat c = chats.get(position);
+            c.select();
+            chatAdapter.notifyDataSetChanged();
         });
     }
 

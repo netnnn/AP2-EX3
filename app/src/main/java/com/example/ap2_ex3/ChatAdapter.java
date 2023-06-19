@@ -17,6 +17,7 @@ import java.util.List;
 public class ChatAdapter extends BaseAdapter {
 
     List<Chat> chats;
+    User currentUser;
 
     private class ViewHolder {
 
@@ -27,10 +28,10 @@ public class ChatAdapter extends BaseAdapter {
         ImageView profile;
     }
 
-    public ChatAdapter(List<Chat> chats) {
+    public ChatAdapter(List<Chat> chats, User currentUser) {
         this.chats = chats;
+        this.currentUser = currentUser;
     }
-
 
 
     @Override
@@ -68,19 +69,21 @@ public class ChatAdapter extends BaseAdapter {
 
         Chat c = chats.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        viewHolder.friendName.setText(c.getUserOne().getUsername());
+        User friend = c.getUserOne().getUsername().equals(currentUser.getUsername())
+                ? c.getUserTwo() : c.getUserOne();
+        viewHolder.friendName.setText(friend.getDisplayName());
 
         int lastPosition = c.getMsgList().size() - 1;
-        Message lastMessage = c.getMsgList().get(lastPosition);
-        viewHolder.lastMessage.setText(lastMessage.getContent());
+        if (c.getMsgList().size() != 0) {
+            Message lastMessage = c.getMsgList().get(lastPosition);
+            viewHolder.lastMessage.setText(lastMessage.getContent());
 
-//        viewHolder.profile.setImageResource(c.getUserOne().getPicture());
+            Integer hours = lastMessage.getDate().getHours();
+            Integer minutes = lastMessage.getDate().getMinutes();
+            viewHolder.timeSent.setText(hours + ":" + minutes);//check the toString
+        }
+        viewHolder.profile.setImageResource(friend.getPicture());
 
-        Integer hours = lastMessage.getDate().getHours();
-        Integer minutes = lastMessage.getDate().getMinutes();
-
-
-        viewHolder.timeSent.setText(hours.toString() + ":" + minutes.toString());//check the toString
 
         viewHolder.chatTile.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ChatActivity.class);
