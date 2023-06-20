@@ -1,13 +1,21 @@
 package com.example.ap2_ex3;
 
+import static android.app.PendingIntent.getActivity;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,12 +28,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     List<Chat> chats;
+    ChatAdapter chatAdapter;
 
     private ChatsViewModel chatsViewModel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.chatsmenu, menu);
         return true;
     }
 
@@ -34,6 +43,34 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+            return true;
+        } else if (item.getItemId() == R.id.action_add_chat) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // Get the layout inflater
+            LayoutInflater inflater = this.getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            View dialogview = inflater.inflate(R.layout.dialog_add_chat, null);
+            // Pass null as the parent view because its going in the dialog layout
+            builder.setView(dialogview)
+                    // Add action buttons
+                    .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                            EditText box = dialogview.findViewById(R.id.newChat);
+                            String friendname = box.getText().toString();
+                            chats.add(new Chat(0, LocalData.users.get(0),LocalData.users.get(1), new ArrayList<>()));
+                            chatAdapter.notifyDataSetChanged();
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            Dialog dialog = builder.create();
+            dialog.show();
             return true;
         }
         else
@@ -54,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         if (chats == null) {
             chats = new ArrayList<>();
         }
-        final ChatAdapter chatAdapter = new ChatAdapter(chats, currentUser);
+        chatAdapter = new ChatAdapter(chats, currentUser);
         lstFeed.setAdapter(chatAdapter);
         lstFeed.setOnItemClickListener((parent, view, position, id) -> {
             Chat c = chats.get(position);
