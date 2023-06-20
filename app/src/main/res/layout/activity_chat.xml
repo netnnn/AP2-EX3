@@ -35,30 +35,43 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <EditText
-            android:id="@+id/enterMessage"
-            android:layout_width="247dp"
-            android:layout_height="60dp"
-            android:hint="enter message..."
-            android:inputType="text"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/sendButton"
-            android:layout_width="56dp"
-            android:layout_height="52dp"
-            android:layout_gravity="center"
-            android:contentDescription="Send"
-            android:src="@drawable/ic_message"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/enterMessage"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+
+            <EditText
+                android:id="@+id/enterMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="10"
+                android:background="@color/chatTileBackground"
+                android:textColor="@color/simpleText"
+                android:hint=" enter message..."
+                android:inputType="text"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/sendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:contentDescription="Send"
+                android:src="@drawable/ic_send_message"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="7dp"
+
+                app:layout_constraintStart_toEndOf="@+id/enterMessage"
+                tools:ignore="MissingConstraints" />
+
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

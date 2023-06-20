@@ -4,6 +4,8 @@ import static android.app.PendingIntent.getActivity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     ChatAdapter chatAdapter;
 
     private ChatsViewModel chatsViewModel;
+//    private MutableLiveData<>
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,11 +85,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        String myUsername = intent.getStringExtra("user");
+        this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
+        this.chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
+
+
+
+
+
+
         setContentView(R.layout.activity_main);
         ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
 
-        Intent intent = getIntent();
-        User currentUser = LocalData.getUserByName(intent.getStringExtra("user"));
+        User currentUser = LocalData.getUserByName(myUsername);
         chats = currentUser.getChatList();
         if (chats == null) {
             chats = new ArrayList<>();

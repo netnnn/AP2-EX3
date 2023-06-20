@@ -11,5 +11,7 @@
     <color name="red">#D7FF0000</color>
     <color name="blue">#D7000278</color>
     <color name="green">#D72B6700</color>
+    <color name="purple">#5900FF</color>
+    <color name="simpleText">#FF000000</color>
 
 </resources>

@@ -3,6 +3,7 @@ package com.example.ap2_ex3;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,9 +39,15 @@ public class ChatActivity extends AppCompatActivity {
 
         EditText newMsg = findViewById(R.id.enterMessage);
         FloatingActionButton sendButton = findViewById(R.id.sendButton);
+        sendButton.setBackgroundColor(Color.parseColor("#5900FF"));
+
 
         sendButton.setOnClickListener(view -> {
             String friendName = getOtherUser(LocalData.getUserByName(myUsername).getChatList().get(position), myUsername);
+            String[] str = newMsg.getText().toString().split(" ");
+            if (str.length == 0 || newMsg.getText().toString().equals("")) {
+                return;
+            }
             LocalData.easyMessage(myUsername, friendName, newMsg.getText().toString());
 
             messageAdapter.notifyDataSetChanged();
