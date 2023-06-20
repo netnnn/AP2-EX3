@@ -15,6 +15,7 @@ import java.util.List;
 public class MessageAdapter extends BaseAdapter {
 
     List<Message> messages;
+    String myUsername;
 
     private class ViewHolder {
 
@@ -23,10 +24,10 @@ public class MessageAdapter extends BaseAdapter {
         TextView timeSent;
     }
 
-    public MessageAdapter(List<Message> messages) {
+    public MessageAdapter(List<Message> messages, String username) {
         this.messages = messages;
+        this.myUsername = username;
     }
-
 
 
     @Override
@@ -47,21 +48,27 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        if (convertView == null) {
+
+        if (messages.get(position).getSender().getUsername().equals(myUsername)) {
             convertView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.message_layout, parent, false);
-
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.messageTile = convertView.findViewById(R.id.messageTile);
-            viewHolder.content = convertView.findViewById(R.id.contentTv);
-            viewHolder.timeSent = convertView.findViewById(R.id.TimeSentTv);
-
-
-            convertView.setTag(viewHolder);
+                    .inflate(R.layout.message_layout_mine, parent, false);
+        } else {
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.message_layout_yours, parent, false);
         }
 
+
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.messageTile = convertView.findViewById(R.id.messageTile);
+        viewHolder.content = convertView.findViewById(R.id.contentTv);
+        viewHolder.timeSent = convertView.findViewById(R.id.TimeSentTv);
+
+
+        convertView.setTag(viewHolder);
+
+
         Message m = messages.get(position);
-        ViewHolder viewHolder = (ViewHolder) convertView.getTag();
+        viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.content.setText(m.getContent());
 
         Integer hours = m.getDate().getHours();
