@@ -11,6 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 public class MessageAdapter extends BaseAdapter {
@@ -72,10 +75,8 @@ public class MessageAdapter extends BaseAdapter {
         viewHolder = (ViewHolder) convertView.getTag();
         viewHolder.content.setText(m.getContent());
 
-        Integer hours = m.getDate().getHours();
-        Integer minutes = m.getDate().getMinutes();
-
-        viewHolder.timeSent.setText(hours.toString() + ":" + minutes.toString());//check the toString
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        viewHolder.timeSent.setText(sdf.format(new Date()));//check the toString
 
         return convertView;
     }
