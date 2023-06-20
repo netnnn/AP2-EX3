@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/blue"
+        android:background="@drawable/msg_bubble_yours"
         android:paddingEnd="15dp"
         android:paddingStart="15dp"
         android:layout_alignParentEnd="true"
