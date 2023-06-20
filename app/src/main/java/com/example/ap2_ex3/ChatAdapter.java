@@ -81,6 +81,9 @@ public class ChatAdapter extends BaseAdapter {
             Integer hours = lastMessage.getDate().getHours();
             Integer minutes = lastMessage.getDate().getMinutes();
             viewHolder.timeSent.setText(hours + ":" + minutes);//check the toString
+        }else{
+            viewHolder.lastMessage.setText("");
+            viewHolder.timeSent.setText("");//check the toString
         }
         viewHolder.profile.setImageResource(friend.getPicture());
 

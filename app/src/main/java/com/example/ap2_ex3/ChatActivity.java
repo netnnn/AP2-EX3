@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,37 +33,27 @@ public class ChatActivity extends AppCompatActivity {
         int position = intent.getIntExtra("position", 0);
 
         messages = LocalData.getUserByName(myUsername).getChatList().get(position).getMsgList();
-        final MessageAdapter messageAdapter = new MessageAdapter(messages);
+        final MessageAdapter messageAdapter = new MessageAdapter(messages, myUsername);
         lstFeed.setAdapter(messageAdapter);
 
         EditText newMsg = findViewById(R.id.enterMessage);
         FloatingActionButton sendButton = findViewById(R.id.sendButton);
-        sendButton.setOnClickListener(view -> {
 
-            messages.add(new Message(5, new Date(), newMsg.getText().toString(), new User(1, "userOne", "password1", "displayName1", 2)));
+        sendButton.setOnClickListener(view -> {
+            String friendName = getOtherUser(LocalData.getUserByName(myUsername).getChatList().get(position), myUsername);
+            LocalData.easyMessage(myUsername, friendName, newMsg.getText().toString());
+
             messageAdapter.notifyDataSetChanged();
+            newMsg.setText("");
+
         });
+        lstFeed.smoothScrollToPosition(lstFeed.getCount() - 1);
     }
 
-    private List<Message> generateMessages() {
-        User userOne = new User(1, "userOne", "password1", "displayName1", R.drawable.misa);
-        User userTwo = new User(1, "userTwo", "password2", "displayName2", 3);
-        Date date = new Date();
-        List<Message> messages = new ArrayList<>();
-        Message message = new Message(1, date, "hello world", userOne);
-        Date date2 = new Date();
-        Message message2 = new Message(2, date2, "hello world2", userTwo);
-        Date date3 = new Date();
-        Message message3 = new Message(3, date3, "hello world3", userOne);
-        Date date4 = new Date();
-        Message message4 = new Message(4, date4, "hello world4", userTwo);
-
-        messages.add(message);
-        messages.add(message2);
-        messages.add(message3);
-        messages.add(message4);
-
-
-        return messages;
+    public String getOtherUser(Chat chat, String myUsername) {
+        if (chat.getUserOne().getUsername().equals(myUsername)){
+            return chat.getUserTwo().getUsername();
+        }
+        return chat.getUserOne().getUsername();
     }
 }
