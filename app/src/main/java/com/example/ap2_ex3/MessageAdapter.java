@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,7 @@ public class MessageAdapter extends BaseAdapter {
 
     private class ViewHolder {
 
-        LinearLayout messageTile;
+        RelativeLayout messageTile;
         TextView content;
         TextView timeSent;
     }
