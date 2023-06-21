@@ -1,10 +1,15 @@
 package com.example.ap2_ex3;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Chat {
 
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
     private User userOne;

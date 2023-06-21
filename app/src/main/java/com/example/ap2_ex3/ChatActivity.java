@@ -29,8 +29,6 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea);
 
-        setTitle(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getDisplayName());
-
         Intent intent = getIntent();
         String myUsername = intent.getStringExtra("name");
         int position = intent.getIntExtra("position", 0);

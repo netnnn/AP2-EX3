@@ -5,9 +5,14 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class User {
 
     private int id;
+    @PrimaryKey(autoGenerate = false)
     private String username = "";
     private String password = "";
     private String displayName = "";
