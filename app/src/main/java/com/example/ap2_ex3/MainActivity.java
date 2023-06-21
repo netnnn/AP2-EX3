@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private ChatsViewModel chatsViewModel;
 
     @Override
+    public void onStart() {
+        super.onStart();
+        chatAdapter.notifyDataSetChanged();
+    }
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.chatsmenu, menu);
         return true;
@@ -93,11 +98,11 @@ public class MainActivity extends AppCompatActivity {
         }
         chatAdapter = new ChatAdapter(chats, currentUser);
         lstFeed.setAdapter(chatAdapter);
-        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
-            Chat c = chats.get(position);
-            c.select();
-            chatAdapter.notifyDataSetChanged();
-        });
+//        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
+//            Chat c = chats.get(position);
+//            c.select();
+//            chatAdapter.notifyDataSetChanged();
+//        });
     }
 
     private List<Chat> generateChats() {
