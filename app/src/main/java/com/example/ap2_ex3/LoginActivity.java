@@ -37,6 +37,16 @@ public class LoginActivity extends AppCompatActivity {
             // Invoke the superclass to handle it.
             return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onResume() {
+        EditText usernameEtLogin = findViewById(R.id.usernameEtLogin);
+        EditText passwordEtLogin = findViewById(R.id.passwordEtLogin);
+        usernameEtLogin.setText("");
+        passwordEtLogin.setText("");
+        super.onResume();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +70,6 @@ public class LoginActivity extends AppCompatActivity {
             String username = usernameEtLogin.getText().toString();
             String passowrd = passwordEtLogin.getText().toString();
             for (User user: LocalData.users) {
-
                 if (user.getUsername().equals(username) && user.getPassword().equals(passowrd)) {
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.putExtra("user", username);

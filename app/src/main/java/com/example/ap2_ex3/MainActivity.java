@@ -4,26 +4,22 @@ import static android.app.PendingIntent.getActivity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Chat> chats;
     ChatAdapter chatAdapter;
+    String myUsername;
 
     private ChatsViewModel chatsViewModel;
 //    private MutableLiveData<>
@@ -40,6 +37,22 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         chatAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        chats.sort(new SortbyLastMsg());
+        ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
+
+        User currentUser = LocalData.getUserByName(myUsername);
+
+        if (chats == null) {
+            chats = new ArrayList<>();
+        }
+        chatAdapter = new ChatAdapter(chats, currentUser);
+        lstFeed.setAdapter(chatAdapter);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.chatsmenu, menu);
@@ -67,7 +80,19 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             EditText box = dialogview.findViewById(R.id.newChat);
                             String friendname = box.getText().toString();
-                            chats.add(new Chat(0, LocalData.users.get(0),LocalData.users.get(1), new ArrayList<>()));
+                            for (Chat chat: chats) {
+                                if (chat.getUserOne().getUsername().equals(friendname) || chat.getUserTwo().getUsername().equals(friendname)){
+                                    return;
+                                }
+                            }
+                            for (User user: LocalData.users) {
+                                if (user.getUsername().equals(friendname)){
+                                    LocalData.getUserByName(myUsername).getChatList().add(0, new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
+                                    user.getChatList().add(0, new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
+                                    break;
+                                }
+                            }
+
                             chatAdapter.notifyDataSetChanged();
                         }
                     })
@@ -87,12 +112,28 @@ public class MainActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
     }
 
+    class SortbyLastMsg implements Comparator<Chat>
+    {
+        // Used for sorting in ascending order of
+        // roll number
+        public int compare(Chat a, Chat b) {
+            if (b.getLastMessage() == null)
+                return -1;
+            if (a.getLastMessage() == null)
+                return 1;
+            int answer = b.getLastMessage().getDate().compareTo(a.getLastMessage().getDate());
+            return answer;
+        }
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        String myUsername = intent.getStringExtra("user");
+        myUsername = intent.getStringExtra("user");
         this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         this.chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
 
@@ -106,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
 
         User currentUser = LocalData.getUserByName(myUsername);
         chats = currentUser.getChatList();
+
+
         if (chats == null) {
             chats = new ArrayList<>();
         }
@@ -118,20 +161,4 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
-    private List<Chat> generateChats() {
-        List<Chat> chats = new ArrayList<>();
-        User userOne = new User(1, "userOne", "password1", "displayName1", 2);
-        User userTwo = new User(1, "userTwo", "password2", "displayName2", 3);
-        Date date = new Date();
-        Message message = new Message(1, date, "hello world", userOne);
-        List<Message> msgList = new ArrayList<>();
-        msgList.add(message);
-        chats.add(new Chat(1, userOne, userTwo, msgList));
-        chats.add(new Chat(2, userTwo, userOne, msgList));
-        chats.add(new Chat(3, userOne, userTwo, msgList));
-        chats.add(new Chat(4, userTwo, userOne, msgList));
-        chats.add(new Chat(5, userOne, userTwo, msgList));
-
-        return chats;
-    }
 }

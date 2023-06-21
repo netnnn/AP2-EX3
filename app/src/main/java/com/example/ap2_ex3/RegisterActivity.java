@@ -120,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
             String displayName = DisplayNameEt.getText().toString();
             //profileIv.getDrawable();
 
-            User newUser = new User(0, username, password, displayName, 3);
+            User newUser = new User(0, username, password, displayName, profileIv.getDrawable());
             LocalData.users.add(newUser);
 
             finish();

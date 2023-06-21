@@ -8,6 +8,8 @@ public class LocalData {
     public static List<User> users = new ArrayList<>();
     private static boolean initialized = false;
 
+    public static String serverUrl = "http://10.0.2.2:5000";
+
     public static User getUserByName(String username) {
         for (User user: users) {
             if (user.getUsername().equals(username)) {
