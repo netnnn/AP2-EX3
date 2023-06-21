@@ -80,7 +80,10 @@ public class ChatAdapter extends BaseAdapter {
 
             Integer hours = lastMessage.getDate().getHours();
             Integer minutes = lastMessage.getDate().getMinutes();
-            viewHolder.timeSent.setText(hours + ":" + minutes);//check the toString
+            String hour_string = hours<10? "0"+hours.toString() : hours.toString();
+            String minute_string = minutes<10? "0"+minutes.toString() : minutes.toString();
+
+            viewHolder.timeSent.setText(hour_string + ":" + minute_string);//check the toString
         }else{
             viewHolder.lastMessage.setText("");
             viewHolder.timeSent.setText("");//check the toString

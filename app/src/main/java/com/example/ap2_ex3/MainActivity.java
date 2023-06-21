@@ -20,6 +20,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -80,20 +81,22 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             EditText box = dialogview.findViewById(R.id.newChat);
                             String friendname = box.getText().toString();
-                            for (Chat chat: chats) {
-                                if (chat.getUserOne().getUsername().equals(friendname) || chat.getUserTwo().getUsername().equals(friendname)){
+                            for (Chat chat : chats) {
+                                if (chat.getUserOne().getUsername().equals(friendname) || chat.getUserTwo().getUsername().equals(friendname)) {
                                     return;
                                 }
                             }
-                            for (User user: LocalData.users) {
-                                if (user.getUsername().equals(friendname)){
+                            for (User user : LocalData.users) {
+                                if (user.getUsername().equals(friendname)) {
                                     LocalData.getUserByName(myUsername).getChatList().add(0, new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
                                     user.getChatList().add(0, new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
                                     break;
                                 }
                             }
 
-                            chatAdapter.notifyDataSetChanged();
+                            chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
+
+//                            chatAdapter.notifyDataSetChanged();
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -105,27 +108,43 @@ public class MainActivity extends AppCompatActivity {
             Dialog dialog = builder.create();
             dialog.show();
             return true;
-        }
-        else
+        } else
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
             return super.onOptionsItemSelected(item);
     }
 
-    class SortbyLastMsg implements Comparator<Chat>
-    {
+    class SortbyLastMsg implements Comparator<Chat> {
         // Used for sorting in ascending order of
         // roll number
         public int compare(Chat a, Chat b) {
-            if (b.getLastMessage() == null)
-                return -1;
-            if (a.getLastMessage() == null)
-                return 1;
-            int answer = b.getLastMessage().getDate().compareTo(a.getLastMessage().getDate());
-            return answer;
+//            if (a.getLastMessage() == null)
+//                return 1;
+//            if (b.getLastMessage() == null) {
+//                return 0;
+//            }
+//            int answer = b.getLastMessage().getDate().compareTo(a.getLastMessage().getDate());
+//            return answer;
+
+            Date dateA;
+            Date dateB;
+            if (a.getLastMessage() == null && b.getLastMessage() == null) {
+                dateA = new Date(0);
+                dateB = new Date(0);
+            } else if (a.getLastMessage() == null && b.getLastMessage() != null) {
+                dateA = new Date(0);
+                dateB = b.getLastMessage().getDate();
+            } else if (b.getLastMessage() == null && a.getLastMessage() != null) {
+                dateA = a.getLastMessage().getDate();
+                dateB = new Date(0);
+            } else {
+                dateA = a.getLastMessage().getDate();
+                dateB = b.getLastMessage().getDate();
+            }
+
+            return dateB.compareTo(dateA);
         }
     }
-
 
 
     @Override
@@ -134,26 +153,27 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         myUsername = intent.getStringExtra("user");
-        this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
-        this.chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
-
-
-
-
-
-
-        setContentView(R.layout.activity_main);
-        ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
-
         User currentUser = LocalData.getUserByName(myUsername);
         chats = currentUser.getChatList();
-
 
         if (chats == null) {
             chats = new ArrayList<>();
         }
+
+        setContentView(R.layout.activity_main);
+        ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
         chatAdapter = new ChatAdapter(chats, currentUser);
         lstFeed.setAdapter(chatAdapter);
+
+        this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
+        this.chatsViewModel.getChatsLiveData().setValue(chats);
+        this.chatsViewModel.getChatsLiveData().observe(this, data -> {
+//                    chatAdapter = new ChatAdapter(data, currentUser);
+                    lstFeed.setAdapter(chatAdapter);
+                }
+        );
+
+
 //        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
 //            Chat c = chats.get(position);
 //            c.select();
