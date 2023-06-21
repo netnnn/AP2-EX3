@@ -19,6 +19,15 @@
     <string name="username_hint">הכנס שם משתמש</string>
     <string name="password_hint">הכנס סיסמא</string>
 
+    <string name="switch_text">החלף למצב כהה</string>
+    <string name="switch_text_to_bright">החלף למצב בהיר</string>
+    <string name="settings">הגדרות</string>
+    <string name="url_server">כתובת שרת:</string>
+    <string name="update_url_server">עדכן כתובת שרת</string>
+
+
+
+
 
 
 </resources>

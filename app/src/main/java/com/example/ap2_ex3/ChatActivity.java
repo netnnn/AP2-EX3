@@ -40,7 +40,11 @@ public class ChatActivity extends AppCompatActivity {
                 | ActionBar.DISPLAY_SHOW_CUSTOM);
         ImageView friendProfile = new ImageView(actionBar.getThemedContext());
         friendProfile.setScaleType(ImageView.ScaleType.CENTER);
-        friendProfile.setImageResource(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture());
+        if (LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture() == 0) {
+            friendProfile.setImageDrawable(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getdPicture());
+        } else {
+            friendProfile.setImageResource(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture());
+        }
         ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
                 200,200,Gravity.END | Gravity.CENTER_VERTICAL);
         layoutParams.rightMargin = 40;

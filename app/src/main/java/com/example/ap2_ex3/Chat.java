@@ -11,8 +11,6 @@ public class Chat {
 
     private User userTwo;
 
-    private String lastMessage;
-
     private List<Message> msgList;
 
     public Chat(int id, User userOne,User userTwo,List<Message> msgList ){
@@ -25,9 +23,6 @@ public class Chat {
         }
     }
 
-    public void setLastMessage(String lastMessage) {
-        this.lastMessage = lastMessage;
-    }
     public int getId() {
         return id;
     }
@@ -60,7 +55,10 @@ public class Chat {
         this.msgList = msgList;
     }
 
-    public void select() {
-         lastMessage = lastMessage + " selected";
+    public Message getLastMessage(){
+        if (this.msgList.size() == 0){
+            return null;
+        }
+        return this.msgList.get(this.msgList.size()-1);
     }
 }

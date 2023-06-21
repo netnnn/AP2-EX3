@@ -85,7 +85,11 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.lastMessage.setText("");
             viewHolder.timeSent.setText("");//check the toString
         }
-        viewHolder.profile.setImageResource(friend.getPicture());
+        if (friend.getPicture() == 0) {
+            viewHolder.profile.setImageDrawable(friend.getdPicture());
+        } else {
+            viewHolder.profile.setImageResource(friend.getPicture());
+        }
 
 
         viewHolder.chatTile.setOnClickListener(v -> {

@@ -1,5 +1,6 @@
 package com.example.ap2_ex3;
 
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ public class User {
     private String username = "";
     private String password = "";
     private String displayName = "";
-    private int picture;
+    private int picture = 0;
+
+    private Drawable dPicture;
 
     private List<Chat> chatList;
 
@@ -21,6 +24,15 @@ public class User {
         this.password = password;
         this.displayName = displayName;
         this.picture = picture;
+        this.chatList = new ArrayList<>();
+    }
+
+    public User(int id, String username, String password, String displayName, Drawable picture) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.displayName = displayName;
+        this.dPicture = picture;
         this.chatList = new ArrayList<>();
     }
 
@@ -62,5 +74,9 @@ public class User {
 
     public void setPictureBase64(int picture) {
         this.picture = picture;
+    }
+
+    public Drawable getdPicture() {
+        return dPicture;
     }
 }
