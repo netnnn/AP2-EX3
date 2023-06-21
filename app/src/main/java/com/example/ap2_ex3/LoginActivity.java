@@ -2,7 +2,9 @@ package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,7 +44,9 @@ public class LoginActivity extends AppCompatActivity {
 
         LocalData.initialize();
 
+
         Button LoginBtn = findViewById(R.id.LoginBtn);
+        LoginBtn.setBackgroundColor(Color.parseColor("#5900FF"));
         EditText usernameEtLogin = findViewById(R.id.usernameEtLogin);
         EditText passwordEtLogin = findViewById(R.id.passwordEtLogin);
 

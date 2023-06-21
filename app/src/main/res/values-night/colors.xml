@@ -6,4 +6,10 @@
     <color name="formBackground">#F01A2537</color>
     <color name="chatTileBackground">#F01A2537</color>
     <color name="lastMessage">#D7878787</color>
+    <color name="content">#D7000000</color>
+    <color name="red">#D7FF0000</color>
+    <color name="blue">#D7000278</color>
+    <color name="green">#D72B6700</color>
+    <color name="purple">#5900FF</color>
+    <color name="simpleText">#FFFFFFFF</color>
 </resources>
