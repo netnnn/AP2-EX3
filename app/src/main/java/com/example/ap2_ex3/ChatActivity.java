@@ -1,15 +1,18 @@
 package com.example.ap2_ex3;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -30,6 +33,20 @@ public class ChatActivity extends AppCompatActivity {
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea);
 
         setTitle(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getDisplayName());
+
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayOptions(actionBar.getDisplayOptions()
+                | ActionBar.DISPLAY_SHOW_CUSTOM);
+        ImageView friendProfile = new ImageView(actionBar.getThemedContext());
+        friendProfile.setScaleType(ImageView.ScaleType.CENTER);
+        friendProfile.setImageResource(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture());
+        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
+                200,200,Gravity.END | Gravity.CENTER_VERTICAL);
+        layoutParams.rightMargin = 40;
+        friendProfile.setLayoutParams(layoutParams);
+        actionBar.setCustomView(friendProfile);
+
 
         Intent intent = getIntent();
         String myUsername = intent.getStringExtra("name");

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     List<Chat> chats;
     ChatAdapter chatAdapter;
+    String myUsername;
 
     private ChatsViewModel chatsViewModel;
 //    private MutableLiveData<>
@@ -67,7 +68,19 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             EditText box = dialogview.findViewById(R.id.newChat);
                             String friendname = box.getText().toString();
-                            chats.add(new Chat(0, LocalData.users.get(0),LocalData.users.get(1), new ArrayList<>()));
+                            for (Chat chat: chats) {
+                                if (chat.getUserOne().getUsername().equals(friendname) || chat.getUserTwo().getUsername().equals(friendname)){
+                                    return;
+                                }
+                            }
+                            for (User user: LocalData.users) {
+                                if (user.getUsername().equals(friendname)){
+                                    LocalData.getUserByName(myUsername).getChatList().add(new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
+                                    user.getChatList().add(new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
+                                    break;
+                                }
+                            }
+
                             chatAdapter.notifyDataSetChanged();
                         }
                     })
@@ -92,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-        String myUsername = intent.getStringExtra("user");
+        myUsername = intent.getStringExtra("user");
         this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         this.chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
 
@@ -118,20 +131,4 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
-    private List<Chat> generateChats() {
-        List<Chat> chats = new ArrayList<>();
-        User userOne = new User(1, "userOne", "password1", "displayName1", 2);
-        User userTwo = new User(1, "userTwo", "password2", "displayName2", 3);
-        Date date = new Date();
-        Message message = new Message(1, date, "hello world", userOne);
-        List<Message> msgList = new ArrayList<>();
-        msgList.add(message);
-        chats.add(new Chat(1, userOne, userTwo, msgList));
-        chats.add(new Chat(2, userTwo, userOne, msgList));
-        chats.add(new Chat(3, userOne, userTwo, msgList));
-        chats.add(new Chat(4, userTwo, userOne, msgList));
-        chats.add(new Chat(5, userOne, userTwo, msgList));
-
-        return chats;
-    }
 }
