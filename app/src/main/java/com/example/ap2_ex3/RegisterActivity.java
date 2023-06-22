@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,6 +30,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -60,7 +63,10 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Register_title);
+
         Button uploadPicBtn = findViewById(R.id.uploadProfileBtn);
+        uploadPicBtn.setBackgroundColor(Color.parseColor("#5900FF"));
         uploadPicBtn.setOnClickListener(view -> {
 
             // Create an AlertDialog.Builder instance
@@ -109,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
 
         Button registerBtn = findViewById(R.id.signUpBtn);
+        registerBtn.setBackgroundColor(Color.parseColor("#5900FF"));
         registerBtn.setOnClickListener(view -> {
             EditText usernameEt = findViewById(R.id.usernameEt);
             EditText PasswordEt = findViewById(R.id.PasswordEt);
@@ -120,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
             String displayName = DisplayNameEt.getText().toString();
             //profileIv.getDrawable();
 
-            User newUser = new User(0, username, password, displayName, 3);
+            User newUser = new User(0, username, password, displayName, profileIv.getDrawable());
             LocalData.users.add(newUser);
 
             finish();

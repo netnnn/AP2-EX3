@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Ap2-Ex3</string>
+    <string name="app_name">Barmats-Web</string>
     <string name="passwordTVLogin">Password</string>
     <string name="nameTVLogin">Name</string>
     <string name="nameTVregister">Name</string>
@@ -15,4 +15,15 @@
     <string name="upload_with">Upload with:</string>
     <string name="password_hint">Enter password here</string>
     <string name="username_hint">Enter username here</string>
+    <string name="switch_text">Switch to dark mode</string>
+    <string name="switch_text_to_bright">Switch to bright mode</string>
+
+    <string name="settings">Settings</string>
+    <string name="url_server">URL server:</string>
+    <string name="update_url_server">Update URL server</string>
+    <string name="Login_title">Login</string>
+    <string name="Register_title">Register</string>
+
+
+
 </resources>

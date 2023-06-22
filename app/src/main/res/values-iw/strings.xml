@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Ap2-Ex3</string>
+    <string name="app_name">Barmats-Web</string>
     <string name="passwordTVLogin">סיסמא</string>
     <string name="nameTVLogin">שם משתמש</string>
 
@@ -18,6 +18,17 @@
     <string name="upload_with">העלה באמצעות:</string>
     <string name="username_hint">הכנס שם משתמש</string>
     <string name="password_hint">הכנס סיסמא</string>
+
+    <string name="switch_text">החלף למצב כהה</string>
+    <string name="switch_text_to_bright">החלף למצב בהיר</string>
+    <string name="settings">הגדרות</string>
+    <string name="url_server">כתובת שרת:</string>
+    <string name="update_url_server">עדכן כתובת שרת</string>
+    <string name="Login_title">התחברות</string>
+    <string name="Register_title">הרשמה</string>
+
+
+
 
 
 

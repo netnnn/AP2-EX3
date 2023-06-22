@@ -4,25 +4,22 @@ import static android.app.PendingIntent.getActivity;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -31,15 +28,31 @@ public class MainActivity extends AppCompatActivity {
 
     List<Chat> chats;
     ChatAdapter chatAdapter;
+    String myUsername;
 
     private ChatsViewModel chatsViewModel;
-//    private MutableLiveData<>
 
     @Override
     public void onStart() {
         super.onStart();
         chatAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        chats.sort(new SortbyLastMsg());
+        ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
+
+        User currentUser = LocalData.getUserByName(myUsername);
+
+        if (chats == null) {
+            chats = new ArrayList<>();
+        }
+        chatAdapter = new ChatAdapter(chats, currentUser);
+        lstFeed.setAdapter(chatAdapter);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.chatsmenu, menu);
@@ -67,8 +80,22 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             EditText box = dialogview.findViewById(R.id.newChat);
                             String friendname = box.getText().toString();
-                            chats.add(new Chat(0, LocalData.users.get(0),LocalData.users.get(1), new ArrayList<>()));
-                            chatAdapter.notifyDataSetChanged();
+                            for (Chat chat : chats) {
+                                if (chat.getUserOne().getUsername().equals(friendname) || chat.getUserTwo().getUsername().equals(friendname)) {
+                                    return;
+                                }
+                            }
+                            for (User user : LocalData.users) {
+                                if (user.getUsername().equals(friendname)) {
+                                    LocalData.getUserByName(myUsername).getChatList().add(0, new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
+                                    user.getChatList().add(0, new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
+                                    break;
+                                }
+                            }
+
+                            chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
+
+//                            chatAdapter.notifyDataSetChanged();
                         }
                     })
                     .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -80,37 +107,72 @@ public class MainActivity extends AppCompatActivity {
             Dialog dialog = builder.create();
             dialog.show();
             return true;
-        }
-        else
+        } else
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
             return super.onOptionsItemSelected(item);
     }
 
+    class SortbyLastMsg implements Comparator<Chat> {
+        // Used for sorting in ascending order of
+        // roll number
+        public int compare(Chat a, Chat b) {
+//            if (a.getLastMessage() == null)
+//                return 1;
+//            if (b.getLastMessage() == null) {
+//                return 0;
+//            }
+//            int answer = b.getLastMessage().getDate().compareTo(a.getLastMessage().getDate());
+//            return answer;
+
+            Date dateA;
+            Date dateB;
+            if (a.getLastMessage() == null && b.getLastMessage() == null) {
+                dateA = new Date(0);
+                dateB = new Date(0);
+            } else if (a.getLastMessage() == null && b.getLastMessage() != null) {
+                dateA = new Date(0);
+                dateB = b.getLastMessage().getDate();
+            } else if (b.getLastMessage() == null && a.getLastMessage() != null) {
+                dateA = a.getLastMessage().getDate();
+                dateB = new Date(0);
+            } else {
+                dateA = a.getLastMessage().getDate();
+                dateB = b.getLastMessage().getDate();
+            }
+
+            return dateB.compareTo(dateA);
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
-        String myUsername = intent.getStringExtra("user");
-        this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
-        this.chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
-
-
-
-
-
-
-        setContentView(R.layout.activity_main);
-        ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
-
+        myUsername = intent.getStringExtra("user");
         User currentUser = LocalData.getUserByName(myUsername);
         chats = currentUser.getChatList();
+
         if (chats == null) {
             chats = new ArrayList<>();
         }
+
+        ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
         chatAdapter = new ChatAdapter(chats, currentUser);
         lstFeed.setAdapter(chatAdapter);
+
+        this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
+        this.chatsViewModel.getChatsLiveData().setValue(chats);
+        this.chatsViewModel.getChatsLiveData().observe(this, data -> {
+//                    chatAdapter = new ChatAdapter(data, currentUser);
+                    lstFeed.setAdapter(chatAdapter);
+                }
+        );
+
+
 //        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
 //            Chat c = chats.get(position);
 //            c.select();
@@ -118,20 +180,4 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
-    private List<Chat> generateChats() {
-        List<Chat> chats = new ArrayList<>();
-        User userOne = new User(1, "userOne", "password1", "displayName1", 2);
-        User userTwo = new User(1, "userTwo", "password2", "displayName2", 3);
-        Date date = new Date();
-        Message message = new Message(1, date, "hello world", userOne);
-        List<Message> msgList = new ArrayList<>();
-        msgList.add(message);
-        chats.add(new Chat(1, userOne, userTwo, msgList));
-        chats.add(new Chat(2, userTwo, userOne, msgList));
-        chats.add(new Chat(3, userOne, userTwo, msgList));
-        chats.add(new Chat(4, userTwo, userOne, msgList));
-        chats.add(new Chat(5, userOne, userTwo, msgList));
-
-        return chats;
-    }
 }
