@@ -9,14 +9,12 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,8 +26,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -51,11 +48,10 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        }
-        else
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
+        } else
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -119,22 +115,34 @@ public class RegisterActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(view -> {
             EditText usernameEt = findViewById(R.id.usernameEt);
             EditText PasswordEt = findViewById(R.id.PasswordEt);
+            EditText verifyET = findViewById(R.id.VerifyPasswordEt);
             EditText DisplayNameEt = findViewById(R.id.DisplayNameEt);
             ImageView profileIv = findViewById(R.id.profileIv);
 
             String username = usernameEt.getText().toString();
             String password = PasswordEt.getText().toString();
+            String verifyPassword = verifyET.getText().toString();
             String displayName = DisplayNameEt.getText().toString();
-            //profileIv.getDrawable();
 
-            User newUser = new User(0, username, password, displayName, profileIv.getDrawable());
+            if (!validate()) {
+                return;
+            }
+
+            int maxId = 0;
+            for (User user : LocalData.users) {
+                for (Chat chat : user.getChatList()) {
+                    if (maxId <= chat.getId()) {
+                        maxId = chat.getId();
+                    }
+                }
+            }
+            User newUser = new User(maxId, username, password, displayName, profileIv.getDrawable());
             LocalData.users.add(newUser);
 
             finish();
         });
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -151,4 +159,105 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
     }
+
+    boolean validate() {
+        EditText usernameEt = findViewById(R.id.usernameEt);
+        EditText PasswordEt = findViewById(R.id.PasswordEt);
+        EditText verifyET = findViewById(R.id.VerifyPasswordEt);
+        EditText DisplayNameEt = findViewById(R.id.DisplayNameEt);
+        ImageView profileIv = findViewById(R.id.profileIv);
+
+        String username = usernameEt.getText().toString();
+        String password = PasswordEt.getText().toString();
+        String verifyPassword = verifyET.getText().toString();
+        String displayName = DisplayNameEt.getText().toString();
+
+        if (username.equals("") || password.equals("") || verifyPassword.equals("") || displayName.equals("")) {
+            if (username.equals("")) {
+                usernameEt.setHintTextColor(Color.RED);
+            } else {
+                usernameEt.setHintTextColor(Color.BLACK);
+            }
+            if (password.equals("")) {
+                PasswordEt.setHintTextColor(Color.RED);
+            } else {
+                PasswordEt.setHintTextColor(Color.BLACK);
+            }
+            if (verifyPassword.equals("")) {
+                verifyET.setHintTextColor(Color.RED);
+            } else {
+                verifyET.setHintTextColor(Color.BLACK);
+            }
+            if (displayName.equals("")) {
+                DisplayNameEt.setHintTextColor(Color.RED);
+            } else {
+                DisplayNameEt.setHintTextColor(Color.BLACK);
+            }
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_register_error);
+
+            TextView dialogTextView = dialog.findViewById(R.id.error);
+            dialogTextView.setText(R.string.fields_are_empty);
+            Button dialogButton = dialog.findViewById(R.id.dialogButton);
+
+            dialogButton.setOnClickListener(v -> dialog.dismiss());
+            dialog.show();
+            return false;
+        }
+
+        if (profileIv.getDrawable() == null) {
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_register_error);
+
+            TextView dialogTextView = dialog.findViewById(R.id.error);
+            dialogTextView.setText(R.string.please_upload_a_photo);
+            Button dialogButton = dialog.findViewById(R.id.dialogButton);
+
+            dialogButton.setOnClickListener(v -> dialog.dismiss());
+            dialog.show();
+            return false;
+        }
+
+        if (password.length() < 7) {
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_register_error);
+
+            TextView dialogTextView = dialog.findViewById(R.id.error);
+            dialogTextView.setText(R.string.password_length);
+            Button dialogButton = dialog.findViewById(R.id.dialogButton);
+
+            dialogButton.setOnClickListener(v -> dialog.dismiss());
+            dialog.show();
+            return false;
+        }
+
+        if (!password.equals(verifyPassword)) {
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_register_error);
+
+            TextView dialogTextView = dialog.findViewById(R.id.error);
+            dialogTextView.setText(R.string.passwords_are_not_identical);
+            Button dialogButton = dialog.findViewById(R.id.dialogButton);
+
+            dialogButton.setOnClickListener(v -> dialog.dismiss());
+            dialog.show();
+            return false;
+        }
+
+        for (User user : LocalData.users) {
+            if (user.getUsername().equals(username)) {
+                Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.dialog_register_error);
+
+                Button dialogButton = dialog.findViewById(R.id.dialogButton);
+
+                dialogButton.setOnClickListener(v -> dialog.dismiss());
+                dialog.show();
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }

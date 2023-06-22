@@ -2,13 +2,9 @@ package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,9 +13,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,8 +29,7 @@ public class LoginActivity extends AppCompatActivity {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
-        }
-        else
+        } else
             // If we got here, the user's action was not recognized.
             // Invoke the superclass to handle it.
             return super.onOptionsItemSelected(item);
@@ -74,25 +66,38 @@ public class LoginActivity extends AppCompatActivity {
 
         LoginBtn.setOnClickListener(view -> {
             String username = usernameEtLogin.getText().toString();
-            String passowrd = passwordEtLogin.getText().toString();
-            if (usernameEtLogin.getText().toString().equals("")) {
-                usernameEtLogin.setHintTextColor(Color.RED);
-            } else {
-                usernameEtLogin.setHintTextColor(Color.BLACK);
+            String password = passwordEtLogin.getText().toString();
+            if (usernameEtLogin.getText().toString().equals("") || passwordEtLogin.getText().toString().equals("")) {
+                if (usernameEtLogin.getText().toString().equals("")) {
+                    usernameEtLogin.setHintTextColor(Color.RED);
+                } else {
+                    usernameEtLogin.setHintTextColor(Color.BLACK);
+                }
+                if (passwordEtLogin.getText().toString().equals("")) {
+                    passwordEtLogin.setHintTextColor(Color.RED);
+                } else {
+                    passwordEtLogin.setHintTextColor(Color.BLACK);
+                }
+                return;
             }
-            if (passwordEtLogin.getText().toString().equals("")) {
-                passwordEtLogin.setHintTextColor(Color.RED);
-            } else {
-                passwordEtLogin.setHintTextColor(Color.BLACK);
-            }
-            for (User user: LocalData.users) {
-                if (user.getUsername().equals(username) && user.getPassword().equals(passowrd)) {
+            for (User user : LocalData.users) {
+                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.putExtra("user", username);
                     startActivity(intent);
-                    break;
+                    return;
                 }
             }
+
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_register_error);
+
+            TextView dialogTextView = dialog.findViewById(R.id.error);
+            dialogTextView.setText(R.string.username_or_password_are_incorrect);
+            Button dialogButton = dialog.findViewById(R.id.dialogButton);
+
+            dialogButton.setOnClickListener(v -> dialog.dismiss());
+            dialog.show();
 
         });
 

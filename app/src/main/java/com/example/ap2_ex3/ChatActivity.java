@@ -2,10 +2,12 @@ package com.example.ap2_ex3;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -34,8 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea);
-
+        ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea); // Replace `listView` with the ID of your ListView
 
         //ACTION BAR
         setTitle(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getDisplayName());
@@ -86,14 +87,20 @@ public class ChatActivity extends AppCompatActivity {
             if (str.length == 0 || newMsg.getText().toString().equals("")) {
                 return;
             }
+            int currentPosition = lstFeed.getFirstVisiblePosition();
+            View topView = lstFeed.getChildAt(0);
+            int offset = (topView == null) ? 0 : (topView.getTop() - lstFeed.getPaddingTop());
+
+
             LocalData.easyMessage(myUsername, friendName, newMsg.getText().toString());
 
 //            messageAdapter.notifyDataSetChanged();
             this.messageViewModel.getMessagesLiveData().setValue(LocalData.getUserByName(myUsername).getChatList().get(position).getMsgList());
             newMsg.setText("");
-
+            lstFeed.setSelectionFromTop(currentPosition, offset);
+            lstFeed.post(() -> lstFeed.setSelection(lstFeed.getCount() - 1));
         });
-        lstFeed.smoothScrollToPosition(lstFeed.getCount() - 1);
+        lstFeed.post(() -> lstFeed.setSelection(lstFeed.getCount()));
     }
 
     public String getOtherUser(Chat chat, String myUsername) {

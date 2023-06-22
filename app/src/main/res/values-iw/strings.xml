@@ -26,10 +26,14 @@
     <string name="update_url_server">עדכן כתובת שרת</string>
     <string name="Login_title">התחברות</string>
     <string name="Register_title">הרשמה</string>
-
-
-
-
+    <string name="username_already_taken">שם משתמש זה תפוס</string>
+    <string name="close">סגור</string>
+    <string name="please_upload_a_photo">אנא העלה תמונה</string>
+    <string name="passwords_are_not_identical">הסיסמאות אינן זהות</string>
+    <string name="password_length">הסיסמא חייבת להיות בעלת 8 תווים לפחות</string>
+    <string name="fields_are_empty">אחד או יותר מהשדות ריקים</string>
+    <string name="username_or_password_are_incorrect">שם המשתמש או הסיסמא אינם נכונים</string>
+    <string name="enter_message"> כתוב הודעה…</string>
 
 
 </resources>
