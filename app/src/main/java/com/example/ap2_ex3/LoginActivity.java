@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -54,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         LocalData.initialize();
 
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Login_title);
 
         Button LoginBtn = findViewById(R.id.LoginBtn);
         LoginBtn.setBackgroundColor(Color.parseColor("#5900FF"));
@@ -69,6 +71,9 @@ public class LoginActivity extends AppCompatActivity {
         LoginBtn.setOnClickListener(view -> {
             String username = usernameEtLogin.getText().toString();
             String passowrd = passwordEtLogin.getText().toString();
+            if (usernameEtLogin.getText().toString().equals("")) {
+                usernameEtLogin.setBackgroundColor(getResources().getColor(R.color.red));
+            }
             for (User user: LocalData.users) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(passowrd)) {
                     Intent intent = new Intent(this, MainActivity.class);
