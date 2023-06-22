@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +20,7 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -54,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
         LocalData.initialize();
 
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Login_title);
 
         Button LoginBtn = findViewById(R.id.LoginBtn);
         LoginBtn.setBackgroundColor(Color.parseColor("#5900FF"));
@@ -69,6 +75,16 @@ public class LoginActivity extends AppCompatActivity {
         LoginBtn.setOnClickListener(view -> {
             String username = usernameEtLogin.getText().toString();
             String passowrd = passwordEtLogin.getText().toString();
+            if (usernameEtLogin.getText().toString().equals("")) {
+                usernameEtLogin.setHintTextColor(Color.RED);
+            } else {
+                usernameEtLogin.setHintTextColor(Color.BLACK);
+            }
+            if (passwordEtLogin.getText().toString().equals("")) {
+                passwordEtLogin.setHintTextColor(Color.RED);
+            } else {
+                passwordEtLogin.setHintTextColor(Color.BLACK);
+            }
             for (User user: LocalData.users) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(passowrd)) {
                     Intent intent = new Intent(this, MainActivity.class);
@@ -79,5 +95,6 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
+
     }
 }
