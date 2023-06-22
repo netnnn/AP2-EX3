@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -71,9 +75,10 @@ public class LoginActivity extends AppCompatActivity {
         LoginBtn.setOnClickListener(view -> {
             String username = usernameEtLogin.getText().toString();
             String passowrd = passwordEtLogin.getText().toString();
-            if (usernameEtLogin.getText().toString().equals("")) {
-                usernameEtLogin.setBackgroundColor(getResources().getColor(R.color.red));
-            }
+//            if (usernameEtLogin.getText().toString().equals("") || true) {
+//                changeBorderColor();
+//
+//            }
             for (User user: LocalData.users) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(passowrd)) {
                     Intent intent = new Intent(this, MainActivity.class);
@@ -84,5 +89,32 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
+
+
+
     }
+
+//    private void changeBorderColor() {
+//        EditText usernameEtLogin = findViewById(R.id.usernameEtLogin);
+//
+//        // Get the current background drawable of the EditText
+//        Drawable backgroundDrawable = usernameEtLogin.getBackground().mutate();
+//
+//        // Create a new drawable with the same shape as the background
+//        Drawable borderDrawable = getResources().getDrawable(R.drawable.edittext_border).mutate();
+//
+//        // Set the color filter on the border drawable
+//        borderDrawable.setColorFilter(Color.parseColor("#00349875") ,PorterDuff.Mode.SRC_IN);
+//
+//        // Create a LayerDrawable with the background and border drawables
+//        Drawable[] layers = new Drawable[] {backgroundDrawable, borderDrawable};
+//        LayerDrawable layerDrawable = new LayerDrawable(layers);
+//
+//        // Set the LayerDrawable as the background of the EditText
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//            usernameEtLogin.setBackground(layerDrawable);
+//        } else {
+//            usernameEtLogin.setBackgroundDrawable(layerDrawable);
+//        }
+//    }
 }
