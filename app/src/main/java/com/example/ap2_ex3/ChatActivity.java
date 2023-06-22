@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -38,29 +40,43 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea); // Replace `listView` with the ID of your ListView
 
-        //ACTION BAR
-        setTitle(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getDisplayName());
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayOptions(actionBar.getDisplayOptions()
-                | ActionBar.DISPLAY_SHOW_CUSTOM);
-        ImageView friendProfile = new ImageView(actionBar.getThemedContext());
-        friendProfile.setScaleType(ImageView.ScaleType.CENTER);
-        if (LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture() == 0) {
-            friendProfile.setImageDrawable(LocalData
-                    .getUserByName(getIntent().getStringExtra("friendname")).getdPicture());
-        } else {
-            friendProfile.setImageResource(LocalData
-                    .getUserByName(getIntent().getStringExtra("friendname")).getPicture());
-        }
-        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
-                200,200,Gravity.END | Gravity.CENTER_VERTICAL);
-        layoutParams.rightMargin = 40;
-        friendProfile.setLayoutParams(layoutParams);
-        actionBar.setCustomView(friendProfile);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.chat_action_bar);
 
-
+        ImageView iv = findViewById(R.id.friendProfile);
+        TextView tv = findViewById(R.id.currentFriendName);
         Intent intent = getIntent();
         String myUsername = intent.getStringExtra("name");
+        String friendUserName = intent.getStringExtra("friendname");
+        tv.setText(LocalData.getUserByName(friendUserName).getDisplayName());
+        if (LocalData.getUserByName(friendUserName).getdPicture() == null){
+            iv.setImageResource(LocalData.getUserByName(friendUserName).getPicture());
+        } else {
+            iv.setImageDrawable(LocalData.getUserByName(friendUserName).getdPicture());
+        }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //ACTION BAR
+        setTitle(LocalData.getUserByName(friendUserName).getDisplayName());
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayOptions(actionBar.getDisplayOptions()
+//                | ActionBar.DISPLAY_SHOW_CUSTOM);
+//        ImageView friendProfile = new ImageView(actionBar.getThemedContext());
+//        friendProfile.setScaleType(ImageView.ScaleType.CENTER);
+//        if (LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture() == 0) {
+//            friendProfile.setImageDrawable(LocalData
+//                    .getUserByName(getIntent().getStringExtra("friendname")).getdPicture());
+//        } else {
+//            friendProfile.setImageResource(LocalData
+//                    .getUserByName(getIntent().getStringExtra("friendname")).getPicture());
+//        }
+//        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
+//                200,200,Gravity.END | Gravity.CENTER_VERTICAL);
+//        layoutParams.rightMargin = 40;
+//        friendProfile.setLayoutParams(layoutParams);
+//        actionBar.setCustomView(friendProfile);
+
         int position = intent.getIntExtra("position", 0);
 
         messages = LocalData.getUserByName(myUsername).getChatList().get(position).getMsgList();
@@ -108,5 +124,15 @@ public class ChatActivity extends AppCompatActivity {
             return chat.getUserTwo().getUsername();
         }
         return chat.getUserOne().getUsername();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            onBackPressed(); // Handle back button press
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

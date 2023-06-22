@@ -34,6 +34,10 @@
     <string name="fields_are_empty">אחד או יותר מהשדות ריקים</string>
     <string name="username_or_password_are_incorrect">שם המשתמש או הסיסמא אינם נכונים</string>
     <string name="enter_message"> כתוב הודעה…</string>
+    <string name="Confirmation">התנתקות</string>
+    <string name="log_out">אתה רוצה להתנתק?</string>
+    <string name="Yes">כן</string>
+    <string name="No">לא</string>
 
 
 </resources>

@@ -180,4 +180,25 @@ public class MainActivity extends AppCompatActivity {
 //        });
     }
 
+    @Override
+    public void onBackPressed() {
+        // Check if the current screen is the main screen
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.Confirmation)
+                .setMessage(R.string.log_out)
+                .setPositiveButton(R.string.Yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton(R.string.No, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
+
 }

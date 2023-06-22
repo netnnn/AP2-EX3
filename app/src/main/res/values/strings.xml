@@ -31,6 +31,11 @@
     <string name="fields_are_empty">one or more fields are empty</string>
     <string name="username_or_password_are_incorrect">Username or password are incorrect</string>
     <string name="enter_message"> enter message…</string>
+    <string name="Confirmation">Log out</string>
+    <string name="log_out">Do you want to log out?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+
 
 
 </resources>
