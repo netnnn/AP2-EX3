@@ -23,6 +23,18 @@
     <string name="update_url_server">Update URL server</string>
     <string name="Login_title">Login</string>
     <string name="Register_title">Register</string>
+    <string name="username_already_taken">Username already taken</string>
+    <string name="close">Close</string>
+    <string name="please_upload_a_photo">Please upload a photo</string>
+    <string name="passwords_are_not_identical">Passwords are not identical</string>
+    <string name="password_length">Password must have at least 8 characters</string>
+    <string name="fields_are_empty">one or more fields are empty</string>
+    <string name="username_or_password_are_incorrect">Username or password are incorrect</string>
+    <string name="enter_message"> enter message…</string>
+    <string name="Confirmation">Log out</string>
+    <string name="log_out">Do you want to log out?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 
 
 
