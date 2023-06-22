@@ -37,7 +37,6 @@ public class ChatActivity extends AppCompatActivity {
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea);
 
 
-
         //ACTION BAR
         setTitle(LocalData.getUserByName(getIntent().getStringExtra("friendname")).getDisplayName());
         ActionBar actionBar = getSupportActionBar();
