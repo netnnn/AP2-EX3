@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     String myUsername;
 
     private ChatsViewModel chatsViewModel;
-//    private MutableLiveData<>
 
     @Override
     public void onStart() {
@@ -150,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         Intent intent = getIntent();
         myUsername = intent.getStringExtra("user");
@@ -160,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
             chats = new ArrayList<>();
         }
 
-        setContentView(R.layout.activity_main);
         ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
         chatAdapter = new ChatAdapter(chats, currentUser);
         lstFeed.setAdapter(chatAdapter);
