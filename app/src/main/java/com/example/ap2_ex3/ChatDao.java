@@ -21,9 +21,13 @@ public interface ChatDao {
     void delete(Chat... chats);
 
     @Query("SELECT * FROM Chat")
-    List<User> index();
+    List<Chat> index();
 
     @Query("SELECT * FROM Chat WHERE id = :id")
-    User get(int id);
+    Chat get(int id);
+
+    @Query("DELETE FROM Chat WHERE id != '0' ")
+    void deleteAll();
+
 
 }

@@ -6,25 +6,30 @@ import android.net.Uri;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class User {
-
+    @ColumnInfo(name = "id")
+    @PrimaryKey(autoGenerate = true)
     private int id;
-    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "username")
     private String username = "";
+    @ColumnInfo(name = "password")
     private String password = "";
+    @ColumnInfo(name = "display name")
     private String displayName = "";
+    @ColumnInfo(name = "picture")
     private int picture = 0;
-
-    private Drawable dPicture;
-
+    @ColumnInfo(name = "drawable picture")
+    public Drawable dPicture;
+    @ColumnInfo(name = "chat list")
     private List<Chat> chatList;
 
-    public User(int id, String username, String password, String displayName, int picture) {
-        this.id = id;
+    public User(String username, String password, String displayName, int picture) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
@@ -32,13 +37,20 @@ public class User {
         this.chatList = new ArrayList<>();
     }
 
-    public User(int id, String username, String password, String displayName, Drawable picture) {
-        this.id = id;
+    public User(String username, String password, String displayName, Drawable picture) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
         this.dPicture = picture;
         this.chatList = new ArrayList<>();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {

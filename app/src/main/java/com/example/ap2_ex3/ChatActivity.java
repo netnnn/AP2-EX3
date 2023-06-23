@@ -120,10 +120,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public String getOtherUser(Chat chat, String myUsername) {
-        if (chat.getUserOne().getUsername().equals(myUsername)){
-            return chat.getUserTwo().getUsername();
+        if (chat.getUserOneName().equals(myUsername)){
+            return chat.getUserTwoName();
         }
-        return chat.getUserOne().getUsername();
+        return chat.getUserOneName();
     }
 
     @Override

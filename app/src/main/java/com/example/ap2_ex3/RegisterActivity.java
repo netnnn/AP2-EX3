@@ -136,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 }
             }
-            User newUser = new User(maxId, username, password, displayName, profileIv.getDrawable());
+            User newUser = new User(username, password, displayName, profileIv.getDrawable());
             LocalData.users.add(newUser);
 
             finish();

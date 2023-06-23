@@ -1,11 +1,13 @@
 package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -13,9 +15,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
+
+    AppDB appDB;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -50,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         LocalData.initialize();
+        initialize();
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Login_title);
 
@@ -101,5 +108,60 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
+    }
+
+    void initialize(){
+        appDB = Room.databaseBuilder(getApplicationContext(),
+                AppDB.class, "User-database").allowMainThreadQueries().build();
+
+        User yagami = new User("yagami", "yyy", "Light", R.drawable.yagami);
+        User L = new User( "L", "lll", "L", R.drawable.lprofile);
+        User watari = new User( "watari", "www", "watari", R.drawable.watari);
+        User misa = new User( "misa", "mmm", "misa-misa", R.drawable.misa);
+        User matsuda = new User( "matsuda", "mmm", "matsuda", R.drawable.matsuda);
+
+        appDB.userDao().deleteAll(); //clean
+
+        appDB.userDao().insert(yagami, L, watari, misa, matsuda);
+
+        List<User> userList = appDB.userDao().index();
+
+        for (User u: userList) {
+            Log.d("users", u.getUsername() +" " + u.getPassword());
+        }
+
+        appDB.chatDao().deleteAll(); //clean
+
+        easyNewChat(yagami, L);
+        easyNewChat(yagami, misa);
+        easyNewChat(misa, L);
+        easyNewChat(watari, L);
+        easyNewChat(watari, matsuda);
+
+        List<Chat> chatList = appDB.chatDao().index();
+
+        for (Chat c: chatList) {
+            Log.d("chats", c.getUserOneName() +" " + c.getUserTwoName());
+        }
+
+    }
+
+    void easyNewChat(User a, User b){
+        Chat chat;
+
+        chat = new Chat(a.getUsername(), b.getUsername(), new ArrayList<>());
+        appDB.chatDao().insert(chat);
+
+        appDB.userDao().delete(a);
+        a.getChatList().add(chat);
+        appDB.userDao().insert(a);
+
+        appDB.userDao().delete(b);
+        b.getChatList().add(chat);
+        appDB.userDao().insert(b);
+
+//        appDB.userDao().update(a);
+//        b.getChatList().add(chat);
+//        appDB.userDao().update(b);
     }
 }

@@ -5,10 +5,8 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity
 public class Message {
 
-    @PrimaryKey(autoGenerate = true)
     private int id;
     private Date date;
     private String content;

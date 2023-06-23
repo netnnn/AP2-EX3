@@ -1,5 +1,6 @@
 package com.example.ap2_ex3;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,20 +11,20 @@ import java.util.List;
 public class Chat {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private int id;
-
-    private User userOne;
-
-    private User userTwo;
-
+    @ColumnInfo(name = "userOneName")
+    private String userOneName;
+    @ColumnInfo(name = "userTwoName")
+    private String userTwoName;
+    @ColumnInfo(name = "msgList")
     private List<Message> msgList;
 
-    public Chat(int id, User userOne,User userTwo,List<Message> msgList ){
-        this.id = id;
-        this.userOne = userOne;
-        this.userTwo = userTwo;
+    public Chat(String userOneName, String userTwoName, List<Message> msgList) {
+        this.userOneName = userOneName;
+        this.userTwoName = userTwoName;
         this.msgList = msgList;
-        if (this.msgList == null){
+        if (this.msgList == null) {
             this.msgList = new ArrayList<>();
         }
     }
@@ -36,20 +37,20 @@ public class Chat {
         this.id = id;
     }
 
-    public User getUserOne() {
-        return userOne;
+    public String getUserOneName() {
+        return userOneName;
     }
 
-    public void setUserOne(User userOne) {
-        this.userOne = userOne;
+    public void setUserOneName(String userOneName) {
+        this.userOneName = userOneName;
     }
 
-    public User getUserTwo() {
-        return userTwo;
+    public String getUserTwoName() {
+        return userTwoName;
     }
 
-    public void setUserTwo(User userTwo) {
-        this.userTwo = userTwo;
+    public void setUserTwoName(String userTwoName) {
+        this.userTwoName = userTwoName;
     }
 
     public List<Message> getMsgList() {
@@ -60,10 +61,10 @@ public class Chat {
         this.msgList = msgList;
     }
 
-    public Message getLastMessage(){
-        if (this.msgList.size() == 0){
+    public Message getLastMessage() {
+        if (this.msgList.size() == 0) {
             return null;
         }
-        return this.msgList.get(this.msgList.size()-1);
+        return this.msgList.get(this.msgList.size() - 1);
     }
 }

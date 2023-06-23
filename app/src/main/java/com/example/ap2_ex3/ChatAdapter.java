@@ -69,8 +69,8 @@ public class ChatAdapter extends BaseAdapter {
 
         Chat c = chats.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
-        User friend = c.getUserOne().getUsername().equals(currentUser.getUsername())
-                ? c.getUserTwo() : c.getUserOne();
+        User friend = c.getUserOneName().equals(currentUser.getUsername())
+                ? LocalData.getUserByName(c.getUserTwoName())  : LocalData.getUserByName(c.getUserOneName());
         viewHolder.friendName.setText(friend.getDisplayName());
 
         int lastPosition = c.getMsgList().size() - 1;

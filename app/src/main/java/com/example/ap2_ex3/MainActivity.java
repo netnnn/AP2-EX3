@@ -5,11 +5,13 @@ import static android.app.PendingIntent.getActivity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Room;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,11 +27,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    AppDB appDB = Room.databaseBuilder(getApplicationContext(),
+            AppDB.class, "User-database").allowMainThreadQueries().build();
+
+    UserDao userDao = appDB.userDao();
+
+
 
     List<Chat> chats;
     ChatAdapter chatAdapter;
     String myUsername;
-
     private ChatsViewModel chatsViewModel;
 
     @Override
@@ -81,14 +88,15 @@ public class MainActivity extends AppCompatActivity {
                             EditText box = dialogview.findViewById(R.id.newChat);
                             String friendname = box.getText().toString();
                             for (Chat chat : chats) {
-                                if (chat.getUserOne().getUsername().equals(friendname) || chat.getUserTwo().getUsername().equals(friendname)) {
+                                if (chat.getUserOneName().equals(friendname) || chat.getUserTwoName().equals(friendname)) {
                                     return;
                                 }
                             }
                             for (User user : LocalData.users) {
                                 if (user.getUsername().equals(friendname)) {
-                                    LocalData.getUserByName(myUsername).getChatList().add(0, new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
-                                    user.getChatList().add(0, new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
+//                                    LocalData.getUserByName(myUsername).getChatList().add(0, new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
+//                                    user.getChatList().add(0, new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
+                                    easyNewChat(userDao.get(myUsername), user);
                                     break;
                                 }
                             }
@@ -151,6 +159,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+/***********************************/
+
+//    personDataBase db = Room.databaseBuilder(getApplicationContext(),
+//            personDataBase.class, "person-database").allowMainThreadQueries().build();
+//
+//    Person joe = new Person("ddddd", "ddddd");
+//    Person pp = new Person("eeee", "eeee");
+//
+//    db.personDao().insertAll(joe, pp);
+//
+//    List<Person> personList = db.personDao().getAllPersons();
+//
+//    for (Person person: personList) {
+//        Log.d("persons", person.firstName +" " + person.lastName);
+//    }
+
+
+
+/***********************************/
+
         Intent intent = getIntent();
         myUsername = intent.getStringExtra("user");
         User currentUser = LocalData.getUserByName(myUsername);
@@ -178,6 +206,17 @@ public class MainActivity extends AppCompatActivity {
 //            c.select();
 //            chatAdapter.notifyDataSetChanged();
 //        });
+    }
+
+    void easyNewChat(User a, User b){
+        Chat chat;
+
+        chat = new Chat(a.getUsername(), b.getUsername(), new ArrayList<>());
+        appDB.chatDao().insert(chat);
+        a.getChatList().add(chat);
+        appDB.userDao().update(a);
+        b.getChatList().add(chat);
+        appDB.userDao().update(b);
     }
 
     @Override
