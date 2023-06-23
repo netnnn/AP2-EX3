@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -171,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
                     lstFeed.setAdapter(chatAdapter);
                 }
         );
+        lstFeed.setOnItemLongClickListener((parent, view, position, id) -> {
+            showDeleteChatDialog(position); // Show the delete chat dialog
+            return true; // Consume the long-press event
+        });
+
 
 
 //        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
@@ -198,6 +204,36 @@ public class MainActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 })
+                .show();
+    }
+
+    private void showDeleteChatDialog(final int pos) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Chat")
+                .setIcon(R.drawable.ic_delete) // Set the trash icon
+                .setMessage("Are you sure you want to delete this chat?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    // Perform delete operation here for the chat at the given position
+                    Chat deleteChat = LocalData.getUserByName(myUsername).getChatList().get(pos);
+                    User user0ne = deleteChat.getUserOne();
+                    User userTwo = deleteChat.getUserTwo();
+                    User friend;
+                    if (user0ne.getUsername().equals(myUsername)) {
+                        friend = userTwo;
+                    } else {
+                        friend = user0ne;
+                    }
+                    LocalData.getUserByName(myUsername).getChatList().remove(pos);
+                    for (Chat chat: friend.getChatList()) {
+                        if (chat.getUserOne().getUsername().equals(myUsername)
+                                || chat.getUserTwo().getUsername().equals(myUsername)) {
+                            friend.getChatList().remove(chat);
+                            break;
+                        }
+                    }
+                    this.chatsViewModel.getChatsLiveData().setValue(chats);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 

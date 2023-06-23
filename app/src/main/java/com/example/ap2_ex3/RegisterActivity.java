@@ -59,6 +59,10 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, GALLERY_REQUEST_CODE);
+
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Register_title);
 
         Button uploadPicBtn = findViewById(R.id.uploadProfileBtn);
@@ -82,15 +86,18 @@ public class RegisterActivity extends AppCompatActivity {
             builder.setNegativeButton(null, null);
 
             positiveButtonIcon.setOnClickListener(v -> {
-                        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
-                                == PackageManager.PERMISSION_DENIED) {
-                            ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-                        }
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-                        dialog.dismiss();
-                    }
-            );
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+                    dialog.dismiss();
+                }
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+                    dialog.dismiss();
+                }
+            });
 
             negativeButtonIcon.setOnClickListener(views -> {
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)

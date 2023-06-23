@@ -1,7 +1,9 @@
 package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +18,9 @@ import android.widget.TextView;
 import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final int CAMERA_REQUEST_CODE = 1001;
+    private static final int GALLERY_REQUEST_CODE = 1002;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
 
         LocalData.initialize();
 
