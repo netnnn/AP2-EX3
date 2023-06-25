@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +21,12 @@ public class ChatAdapter extends BaseAdapter {
     UserDao userDao;
     List<Chat> chats;
     User currentUser;
+
+    private View.OnLongClickListener onLongClickListener;
+
+    public void setOnLongClickListener(View.OnLongClickListener listener) {
+        this.onLongClickListener = listener;
+    }
 
     private class ViewHolder {
 
@@ -112,7 +119,16 @@ public class ChatAdapter extends BaseAdapter {
             v.getContext().startActivity(intent);
         });
 
+        convertView.setOnLongClickListener(v -> {
+            if (onLongClickListener != null) {
+                onLongClickListener.onLongClick(v);
+                return true;
+            }
+            return false;
+        });
+
         return convertView;
     }
+
 
 }
