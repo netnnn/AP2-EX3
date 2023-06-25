@@ -19,16 +19,16 @@ public class LocalData {
         return null;
     }
 
-    public static Chat getChatByName(String myUsername, String friend) {
-        if (getUserByName(myUsername).getChatList() == null)
-            return null;
-        for (Chat chat: getUserByName(myUsername).getChatList()) {
-            if (chat.getUserOneName().equals(friend) || chat.getUserTwoName().equals(friend)) {
-                return chat;
-            }
-        }
-        return null;
-    }
+//    public static Chat getChatByName(String myUsername, String friend) {
+//        if (getUserByName(myUsername).getChatList() == null)
+//            return null;
+//        for (Chat chat: getUserByName(myUsername).getChatList()) {
+//            if (chat.getUserOneName().equals(friend) || chat.getUserTwoName().equals(friend)) {
+//                return chat;
+//            }
+//        }
+//        return null;
+//    }
 
     public static void initialize() {
         if (initialized) {
@@ -73,16 +73,16 @@ public class LocalData {
         initialized = true;
     }
 
-    public static void easyMessage(String from, String to, String content){
-        Date date = new Date();
-        Message message = new Message(1, date, content, getUserByName(from));
-        Chat chat1 = LocalData.getChatByName(from, to);
-        Chat chat2 = LocalData.getChatByName(to, from);
-
-        chat1.getMsgList().add(message);
-        chat2.getMsgList().add(message);
-
-    }
+//    public static void easyMessage(String from, String to, String content){
+//        Date date = new Date();
+//        Message message = new Message(1, date, content, from);
+//        Chat chat1 = LocalData.getChatByName(from, to);
+//        Chat chat2 = LocalData.getChatByName(to, from);
+//
+////        chat1.getMsgList().add(message);
+////        chat2.getMsgList().add(message);
+//
+//    }
 
 
 

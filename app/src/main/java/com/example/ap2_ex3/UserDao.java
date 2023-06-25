@@ -29,4 +29,7 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE username = :username")
     User get(String username);
 
+    @Query("SELECT `chat list` FROM user WHERE username = :username")
+    List<Chat> getChatList(String username);
+
 }

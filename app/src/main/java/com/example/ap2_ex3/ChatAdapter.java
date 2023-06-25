@@ -16,10 +16,14 @@ import java.util.List;
 
 public class ChatAdapter extends BaseAdapter {
 
+    AppDB appDB;
+    UserDao userDao;
     List<Chat> chats;
     User currentUser;
 
     private class ViewHolder {
+
+
 
         LinearLayout chatTile;
         TextView friendName;
@@ -31,6 +35,7 @@ public class ChatAdapter extends BaseAdapter {
     public ChatAdapter(List<Chat> chats, User currentUser) {
         this.chats = chats;
         this.currentUser = currentUser;
+//        this.appDB = AppDB.getDBInstance(Parent);
     }
 
 
@@ -52,6 +57,10 @@ public class ChatAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+                this.appDB = AppDB.getDBInstance(parent.getContext());
+                userDao = appDB.userDao();
+
+
         if (convertView == null) {
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.chat_layout, parent, false);
@@ -70,7 +79,7 @@ public class ChatAdapter extends BaseAdapter {
         Chat c = chats.get(position);
         ViewHolder viewHolder = (ViewHolder) convertView.getTag();
         User friend = c.getUserOneName().equals(currentUser.getUsername())
-                ? LocalData.getUserByName(c.getUserTwoName())  : LocalData.getUserByName(c.getUserOneName());
+                ? userDao.get(c.getUserTwoName())  : userDao.get(c.getUserOneName());
         viewHolder.friendName.setText(friend.getDisplayName());
 
         int lastPosition = c.getMsgList().size() - 1;
@@ -89,7 +98,7 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.timeSent.setText("");//check the toString
         }
         if (friend.getPicture() == 0) {
-            viewHolder.profile.setImageDrawable(friend.getdPicture());
+            viewHolder.profile.setImageBitmap(friend.getBitmap());
         } else {
             viewHolder.profile.setImageResource(friend.getPicture());
         }

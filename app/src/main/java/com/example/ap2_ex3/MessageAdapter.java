@@ -1,18 +1,13 @@
 package com.example.ap2_ex3;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +48,7 @@ public class MessageAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
 
-        if (messages.get(position).getSender().getUsername().equals(myUsername)) {
+        if (messages.get(position).getSenderName().equals(myUsername)) {
             convertView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.message_layout_mine, parent, false);
         } else {

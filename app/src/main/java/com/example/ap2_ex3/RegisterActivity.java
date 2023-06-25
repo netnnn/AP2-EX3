@@ -15,8 +15,13 @@ import android.content.pm.PackageManager;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -28,9 +33,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Objects;
 
+
+
 public class RegisterActivity extends AppCompatActivity {
+//    static byte[] byteArray;
+
+    private Bitmap bitmap;
+    private AppDB appDB;
+    private UserDao userDao;
 
     private static final int CAMERA_REQUEST_CODE = 1001;
     private static final int GALLERY_REQUEST_CODE = 1002;
@@ -58,6 +73,9 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        this.appDB = AppDB.getDBInstance(this);
+        userDao = appDB.userDao();
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Register_title);
 
@@ -124,20 +142,12 @@ public class RegisterActivity extends AppCompatActivity {
             String verifyPassword = verifyET.getText().toString();
             String displayName = DisplayNameEt.getText().toString();
 
-            if (!validate()) {
-                return;
-            }
+//            if (!validate()) {
+//                return;
+//            }
 
-            int maxId = 0;
-            for (User user : LocalData.users) {
-                for (Chat chat : user.getChatList()) {
-                    if (maxId <= chat.getId()) {
-                        maxId = chat.getId();
-                    }
-                }
-            }
-            User newUser = new User(username, password, displayName, profileIv.getDrawable());
-            LocalData.users.add(newUser);
+            User newUser = new User(username, password, displayName, this.bitmap);
+            userDao.insert(newUser);
 
             finish();
         });
@@ -151,11 +161,19 @@ public class RegisterActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             IV.setImageBitmap(photo);
+            this.bitmap = photo;
+//            new BitmapToByteArrayTask().execute(photo);
+//            this.byteArray = byteArray;
         }
 
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
             IV.setImageURI(selectedImageUri);
+            this.bitmap = getBitmapFromUri(selectedImageUri);
+//            if (bitmap != null) {
+//                new BitmapToByteArrayTask().execute(bitmap);
+////                this.byteArray = byteArray;
+//            }
         }
 
     }
@@ -244,7 +262,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
 
-        for (User user : LocalData.users) {
+        for (User user : userDao.index()) {
             if (user.getUsername().equals(username)) {
                 Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.dialog_register_error);
@@ -259,5 +277,29 @@ public class RegisterActivity extends AppCompatActivity {
         return true;
     }
 
+    public Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+//    private class BitmapToByteArrayTask extends AsyncTask<Bitmap, Void, byte[]> {
+//        @Override
+//        protected byte[] doInBackground(Bitmap... bitmaps) {
+//            Bitmap bitmap = bitmaps[0];
+//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+//            return outputStream.toByteArray();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(byte[] byteArray) {
+//            RegisterActivity.byteArray = byteArray;
+//        }
+//    }
 
 }

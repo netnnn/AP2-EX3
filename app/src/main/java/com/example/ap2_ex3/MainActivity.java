@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.google.gson.internal.LinkedTreeMap;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,10 +29,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    AppDB appDB = Room.databaseBuilder(getApplicationContext(),
-            AppDB.class, "User-database").allowMainThreadQueries().build();
+    AppDB appDB;
 
-    UserDao userDao = appDB.userDao();
+    UserDao userDao;
+    ChatDao chatDao;
 
 
 
@@ -48,10 +50,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        User currentUser = userDao.get(myUsername);
+        chats = currentUser.getChatList();
+
         chats.sort(new SortbyLastMsg());
         ListView lstFeed = (ListView) findViewById(R.id.myChatsArea);
-
-        User currentUser = LocalData.getUserByName(myUsername);
 
         if (chats == null) {
             chats = new ArrayList<>();
@@ -92,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                     return;
                                 }
                             }
-                            for (User user : LocalData.users) {
+                            for (User user : userDao.index()) {
                                 if (user.getUsername().equals(friendname)) {
 //                                    LocalData.getUserByName(myUsername).getChatList().add(0, new Chat(0, user, LocalData.getUserByName(myUsername), new ArrayList<>()));
 //                                    user.getChatList().add(0, new Chat(0, LocalData.getUserByName(myUsername), user, new ArrayList<>()));
@@ -101,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
 
-                            chatsViewModel.getChatsLiveData().setValue(LocalData.getUserByName(myUsername).getChatList());
+                            chatsViewModel.getChatsLiveData().setValue(userDao.get(myUsername).getChatList());
 
 //                            chatAdapter.notifyDataSetChanged();
                         }
@@ -125,13 +129,6 @@ public class MainActivity extends AppCompatActivity {
         // Used for sorting in ascending order of
         // roll number
         public int compare(Chat a, Chat b) {
-//            if (a.getLastMessage() == null)
-//                return 1;
-//            if (b.getLastMessage() == null) {
-//                return 0;
-//            }
-//            int answer = b.getLastMessage().getDate().compareTo(a.getLastMessage().getDate());
-//            return answer;
 
             Date dateA;
             Date dateB;
@@ -159,29 +156,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-/***********************************/
+        appDB = AppDB.getDBInstance(getApplicationContext());
 
-//    personDataBase db = Room.databaseBuilder(getApplicationContext(),
-//            personDataBase.class, "person-database").allowMainThreadQueries().build();
-//
-//    Person joe = new Person("ddddd", "ddddd");
-//    Person pp = new Person("eeee", "eeee");
-//
-//    db.personDao().insertAll(joe, pp);
-//
-//    List<Person> personList = db.personDao().getAllPersons();
-//
-//    for (Person person: personList) {
-//        Log.d("persons", person.firstName +" " + person.lastName);
-//    }
-
-
-
-/***********************************/
+        userDao = appDB.userDao();
+        chatDao = appDB.chatDao();
 
         Intent intent = getIntent();
         myUsername = intent.getStringExtra("user");
-        User currentUser = LocalData.getUserByName(myUsername);
+        User currentUser = userDao.get(myUsername);
         chats = currentUser.getChatList();
 
         if (chats == null) {
@@ -195,28 +177,36 @@ public class MainActivity extends AppCompatActivity {
         this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         this.chatsViewModel.getChatsLiveData().setValue(chats);
         this.chatsViewModel.getChatsLiveData().observe(this, data -> {
-//                    chatAdapter = new ChatAdapter(data, currentUser);
+                    chatAdapter = new ChatAdapter(data, currentUser);
                     lstFeed.setAdapter(chatAdapter);
                 }
         );
 
-
-//        lstFeed.setOnItemClickListener((parent, view, position, id) -> {
-//            Chat c = chats.get(position);
-//            c.select();
-//            chatAdapter.notifyDataSetChanged();
-//        });
     }
 
     void easyNewChat(User a, User b){
         Chat chat;
 
         chat = new Chat(a.getUsername(), b.getUsername(), new ArrayList<>());
-        appDB.chatDao().insert(chat);
-        a.getChatList().add(chat);
-        appDB.userDao().update(a);
-        b.getChatList().add(chat);
-        appDB.userDao().update(b);
+        chatDao.insert(chat);
+
+
+        User userA = userDao.get(a.getUsername());
+        List<Chat> temp = userA.getChatList();
+        temp.add(chat);
+        userA.setChatList(temp);
+        userDao.update(userA);
+
+
+        User userB = userDao.get(b.getUsername());
+        temp = userB.getChatList();
+        temp.add(chat);
+        userB.setChatList(temp);
+        userDao.update(userB);
+
+
+//        LocalData.getUserByName(a.getUsername()).getChatList().add(chat);
+//        LocalData.getUserByName(b.getUsername()).getChatList().add(chat);
     }
 
     @Override

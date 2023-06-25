@@ -67,4 +67,8 @@ public class Chat {
         }
         return this.msgList.get(this.msgList.size() - 1);
     }
+
+    public void addMsg(Message msg){
+        this.msgList.add(msg);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.ap2_ex3;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -24,10 +26,13 @@ public class User {
     private String displayName = "";
     @ColumnInfo(name = "picture")
     private int picture = 0;
-    @ColumnInfo(name = "drawable picture")
-    public Drawable dPicture;
+//    @ColumnInfo(name = "drawable picture")
+//    public Drawable dPicture;
     @ColumnInfo(name = "chat list")
     private List<Chat> chatList;
+
+    @ColumnInfo(name = "bitmap")
+    private Bitmap bitmap;
 
     public User(String username, String password, String displayName, int picture) {
         this.username = username;
@@ -37,12 +42,18 @@ public class User {
         this.chatList = new ArrayList<>();
     }
 
-    public User(String username, String password, String displayName, Drawable picture) {
+    @Ignore
+
+    public User(String username, String password, String displayName, Bitmap byteArray) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
-        this.dPicture = picture;
+        this.bitmap = byteArray;
         this.chatList = new ArrayList<>();
+    }
+
+    public void setPicture(int picture) {
+        this.picture = picture;
     }
 
     public int getId() {
@@ -93,7 +104,26 @@ public class User {
         this.picture = picture;
     }
 
-    public Drawable getdPicture() {
-        return dPicture;
+//    public Drawable getdPicture() {
+//        return dPicture;
+//    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap byteArray) {
+        this.bitmap = byteArray;
+    }
+
+    public Chat findChatWith(String friendName){
+
+        for (Chat chat: chatList) {
+            if (chat.getUserOneName().equals(friendName) || chat.getUserTwoName().equals(friendName)){
+                return chat;
+            }
+
+        }
+        return null;
     }
 }
