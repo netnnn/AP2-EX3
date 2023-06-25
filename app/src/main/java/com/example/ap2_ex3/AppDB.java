@@ -8,8 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 
-@Database(entities = {User.class, Chat.class, Message.class}, version = 1)
-//@Database(entities = {User.class, Chat.class}, version = 1)
+@Database(entities = {User.class, Chat.class, Message.class, Settings.class}, version = 1)
 @TypeConverters(Converters.class)
 public abstract class AppDB extends RoomDatabase {
 
@@ -18,12 +17,12 @@ public abstract class AppDB extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract ChatDao chatDao();
     public abstract MessageDao messageDao();
+    public  abstract SettingsDao settingsDao();
 
     public static synchronized AppDB getDBInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDB.class, "my_database").allowMainThreadQueries()
-                    .build();
+                    AppDB.class, "my_database").allowMainThreadQueries().build();
         }
         return instance;
     }

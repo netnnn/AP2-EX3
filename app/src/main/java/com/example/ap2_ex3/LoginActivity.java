@@ -1,6 +1,7 @@
 package com.example.ap2_ex3;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.room.Room;
 
 import android.app.Dialog;
@@ -26,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     UserDao userDao;
 
     ChatDao chatDao;
+    SettingsDao settingsDao;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,6 +122,22 @@ public class LoginActivity extends AppCompatActivity {
         appDB = AppDB.getDBInstance(getApplicationContext());
         userDao = appDB.userDao();
         chatDao = appDB.chatDao();
+        settingsDao = appDB.settingsDao();
+
+        String url = settingsDao.getURL();
+        if (url == null){
+            url = "http://10.0.2.2:5000";
+            boolean darkMode = false;
+
+            Settings settings = new Settings(url, darkMode);
+            settingsDao.insert(settings);
+        }
+
+        if (settingsDao.getDarkMode()){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
 
         User yagami = new User("yagami", "yyy", "Light", R.drawable.yagami);
         User L = new User("L", "lll", "L", R.drawable.lprofile);
