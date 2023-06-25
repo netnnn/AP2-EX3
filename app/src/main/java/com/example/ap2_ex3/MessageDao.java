@@ -20,10 +20,10 @@ public interface MessageDao {
     @Delete
     void delete(Message... messages);
 
-    @Query("SELECT * FROM Message")
-    List<User> index();
+    @Query("SELECT * FROM message")
+    List<Message> index();
 
-    @Query("SELECT * FROM Message WHERE id = :id")
-    User get(int id);
+    @Query("SELECT * FROM message WHERE id = :id")
+    Message get(int id);
 
 }

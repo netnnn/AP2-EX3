@@ -30,6 +30,11 @@ import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     List<Message> messages;
+    AppDB appDB;
+    UserDao userDao;
+    ChatDao chatDao;
+    MessageDao messageDao;
+    User me;
 
     private MessageViewModel messageViewModel;
 
@@ -38,6 +43,12 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        appDB = AppDB.getDBInstance(getApplicationContext());
+        userDao = appDB.userDao();
+        chatDao = appDB.chatDao();
+        messageDao = appDB.messageDao();
+
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea); // Replace `listView` with the ID of your ListView
 
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -48,48 +59,35 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String myUsername = intent.getStringExtra("name");
         String friendUserName = intent.getStringExtra("friendname");
-        tv.setText(LocalData.getUserByName(friendUserName).getDisplayName());
-        if (LocalData.getUserByName(friendUserName).getdPicture() == null){
-            iv.setImageResource(LocalData.getUserByName(friendUserName).getPicture());
+
+        me = userDao.get(myUsername);
+        User friend = userDao.get(friendUserName);
+
+
+        tv.setText(friend.getDisplayName());
+        if (friend.getPicture() == 0){
+            iv.setImageBitmap(friend.getBitmap());
         } else {
-            iv.setImageDrawable(LocalData.getUserByName(friendUserName).getdPicture());
+            iv.setImageResource(friend.getPicture());
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //ACTION BAR
-        setTitle(LocalData.getUserByName(friendUserName).getDisplayName());
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setDisplayOptions(actionBar.getDisplayOptions()
-//                | ActionBar.DISPLAY_SHOW_CUSTOM);
-//        ImageView friendProfile = new ImageView(actionBar.getThemedContext());
-//        friendProfile.setScaleType(ImageView.ScaleType.CENTER);
-//        if (LocalData.getUserByName(getIntent().getStringExtra("friendname")).getPicture() == 0) {
-//            friendProfile.setImageDrawable(LocalData
-//                    .getUserByName(getIntent().getStringExtra("friendname")).getdPicture());
-//        } else {
-//            friendProfile.setImageResource(LocalData
-//                    .getUserByName(getIntent().getStringExtra("friendname")).getPicture());
-//        }
-//        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
-//                200,200,Gravity.END | Gravity.CENTER_VERTICAL);
-//        layoutParams.rightMargin = 40;
-//        friendProfile.setLayoutParams(layoutParams);
-//        actionBar.setCustomView(friendProfile);
+        setTitle(friend.getDisplayName());
 
         int position = intent.getIntExtra("position", 0);
 
-        messages = LocalData.getUserByName(myUsername).getChatList().get(position).getMsgList();
+        messages = me.getChatList().get(position).getMsgList();
         this.messageAdapter = new MessageAdapter(messages, myUsername);
         lstFeed.setAdapter(messageAdapter);
 
         this.messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         this.messageViewModel.getMessagesLiveData().setValue(messages);
         this.messageViewModel.getMessagesLiveData().observe(this, data -> {
+            this.messageAdapter = new MessageAdapter(data, myUsername);
             lstFeed.setAdapter(messageAdapter);
         });
-
-
 
 
         EditText newMsg = findViewById(R.id.enterMessage);
@@ -98,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
         sendButton.setOnClickListener(view -> {
-            String friendName = getOtherUser(LocalData.getUserByName(myUsername).getChatList().get(position), myUsername);
+            String friendName = getOtherUser(me.getChatList().get(position), myUsername);
             String[] str = newMsg.getText().toString().split(" ");
             if (str.length == 0 || newMsg.getText().toString().equals("")) {
                 return;
@@ -108,10 +106,12 @@ public class ChatActivity extends AppCompatActivity {
             int offset = (topView == null) ? 0 : (topView.getTop() - lstFeed.getPaddingTop());
 
 
-            LocalData.easyMessage(myUsername, friendName, newMsg.getText().toString());
+            easyMessage(myUsername, friendName, newMsg.getText().toString());
+
+            me = userDao.get(myUsername);
 
 //            messageAdapter.notifyDataSetChanged();
-            this.messageViewModel.getMessagesLiveData().setValue(LocalData.getUserByName(myUsername).getChatList().get(position).getMsgList());
+            this.messageViewModel.getMessagesLiveData().setValue(me.getChatList().get(position).getMsgList());
             newMsg.setText("");
             lstFeed.setSelectionFromTop(currentPosition, offset);
             lstFeed.post(() -> lstFeed.setSelection(lstFeed.getCount() - 1));
@@ -120,10 +120,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public String getOtherUser(Chat chat, String myUsername) {
-        if (chat.getUserOne().getUsername().equals(myUsername)){
-            return chat.getUserTwo().getUsername();
+        if (chat.getUserOneName().equals(myUsername)){
+            return chat.getUserTwoName();
         }
-        return chat.getUserOne().getUsername();
+        return chat.getUserOneName();
     }
 
     @Override
@@ -134,5 +134,21 @@ public class ChatActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void easyMessage(String from, String to, String content) {
+        Date date = new Date();
+        Message message = new Message(date, content, from);
+
+        User userA = userDao.get(from);
+        Chat chat = userA.findChatWith(to);
+        chat.addMsg(message);
+        userDao.update(userA);
+
+        User userB = userDao.get(to);
+        chat = userB.findChatWith(from);
+        chat.addMsg(message);
+        userDao.update(userB);
+
     }
 }

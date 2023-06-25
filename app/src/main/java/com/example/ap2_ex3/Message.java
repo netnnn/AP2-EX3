@@ -1,5 +1,6 @@
 package com.example.ap2_ex3;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -9,16 +10,20 @@ import java.util.Date;
 public class Message {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private int id;
+    @ColumnInfo(name = "date")
     private Date date;
+    @ColumnInfo(name = "content")
     private String content;
-    private User sender;
+    @ColumnInfo(name = "senderName")
+    private String senderName;
 
-    public Message(int id, Date date, String content, User sender) {
-        this.id = id;
+    public Message(Date date, String content, String senderName) {
+//        this.id = id;
         this.date = date;
         this.content = content;
-        this.sender = sender;
+        this.senderName = senderName;
     }
 
     public int getId() {
@@ -45,11 +50,11 @@ public class Message {
         this.content = content;
     }
 
-    public User getSender() {
-        return sender;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public void setSender(User sender) {
-        this.sender = sender;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 }
