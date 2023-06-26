@@ -19,9 +19,21 @@ public class Settings {
     @ColumnInfo(name = "dark mode")
     private boolean darkMode;
 
-    public Settings(String serverURL, boolean darkMode) {
+    @ColumnInfo(name = "first init")
+    private boolean firstInit;
+
+    public boolean isFirstInit() {
+        return firstInit;
+    }
+
+    public void setFirstInit(boolean firstInit) {
+        this.firstInit = firstInit;
+    }
+
+    public Settings(String serverURL, boolean darkMode, boolean firstInit) {
         this.serverURL = serverURL;
         this.darkMode = darkMode;
+        this.firstInit = firstInit;
     }
 
     public String getServerURL() {

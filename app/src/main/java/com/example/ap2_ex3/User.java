@@ -28,8 +28,11 @@ public class User {
     @ColumnInfo(name = "chat list")
     private List<Chat> chatList;
 
-    @ColumnInfo(name = "bitmap")
-    private Bitmap bitmap;
+//    @ColumnInfo(name = "bitmap")
+//    private Bitmap bitmap;
+
+        @ColumnInfo(name = "base64")
+        private String base64;
 
     public User(String username, String password, String displayName, int picture) {
         this.username = username;
@@ -41,11 +44,11 @@ public class User {
 
     @Ignore
 
-    public User(String username, String password, String displayName, Bitmap byteArray) {
+    public User(String username, String password, String displayName, String base64) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;
-        this.bitmap = byteArray;
+        this.base64 = base64;
         this.chatList = new ArrayList<>();
     }
 
@@ -105,12 +108,21 @@ public class User {
 //        return dPicture;
 //    }
 
-    public Bitmap getBitmap() {
-        return bitmap;
+//    public Bitmap getBitmap() {
+//        return bitmap;
+//    }
+//
+//    public void setBitmap(Bitmap byteArray) {
+//        this.bitmap = byteArray;
+//    }
+
+
+    public String getBase64() {
+        return base64;
     }
 
-    public void setBitmap(Bitmap byteArray) {
-        this.bitmap = byteArray;
+    public void setBase64(String base64) {
+        this.base64 = base64;
     }
 
     public Chat findChatWith(String friendName){

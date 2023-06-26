@@ -71,7 +71,7 @@ public class MessageAdapter extends BaseAdapter {
         viewHolder.content.setText(m.getContent());
 
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        viewHolder.timeSent.setText(sdf.format(new Date()));//check the toString
+        viewHolder.timeSent.setText(sdf.format(m.getDate()));//check the toString
 
         return convertView;
     }

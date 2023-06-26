@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
     ChatDao chatDao;
 
 
-
     List<Chat> chats;
     ChatAdapter chatAdapter;
     String myUsername;
@@ -92,6 +91,12 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int id) {
                             EditText box = dialogview.findViewById(R.id.newChat);
                             String friendname = box.getText().toString();
+
+                            if (friendname.equals(myUsername)){
+                                showDialog();
+                                return; //don't add yourself
+                            }
+
                             for (Chat chat : chats) {
                                 if (chat.getUserOneName().equals(friendname) || chat.getUserTwoName().equals(friendname)) {
                                     return;
@@ -190,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void easyNewChat(User a, User b){
+    void easyNewChat(User a, User b) {
         Chat chat;
 
         chat = new Chat(a.getUsername(), b.getUsername(), new ArrayList<>());
@@ -243,26 +248,51 @@ public class MainActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to delete this chat?")
                 .setPositiveButton("Delete", (dialog, which) -> {
                     // Perform delete operation here for the chat at the given position
-                    Chat deleteChat = LocalData.getUserByName(myUsername).getChatList().get(pos);
-                    User user0ne = deleteChat.getUserOne();
-                    User userTwo = deleteChat.getUserTwo();
-                    User friend;
-                    if (user0ne.getUsername().equals(myUsername)) {
+                    User me = userDao.get(myUsername);
+                    List<Chat> myChats = me.getChatList();
+                    Chat deleteChat = myChats.get(pos);
+
+                    String user0ne = deleteChat.getUserOneName();
+                    String userTwo = deleteChat.getUserTwoName();
+                    String friend;
+                    if (user0ne.equals(myUsername)) {
                         friend = userTwo;
                     } else {
                         friend = user0ne;
                     }
-                    LocalData.getUserByName(myUsername).getChatList().remove(pos);
-                    for (Chat chat: friend.getChatList()) {
-                        if (chat.getUserOne().getUsername().equals(myUsername)
-                                || chat.getUserTwo().getUsername().equals(myUsername)) {
-                            friend.getChatList().remove(chat);
+
+                    myChats.remove(pos);
+                    chats = myChats;
+                    me.setChatList(myChats);
+                    userDao.update(me);
+
+                    User you = userDao.get(friend);
+                    List<Chat> yourChats = you.getChatList();
+
+                    for (Chat chat : yourChats) {
+                        if (chat.getUserOneName().equals(myUsername)
+                                || chat.getUserTwoName().equals(myUsername)) {
+                            yourChats.remove(chat);
+                            you.setChatList(yourChats);
+                            userDao.update(you);
                             break;
                         }
                     }
+
+
                     this.chatsViewModel.getChatsLiveData().setValue(chats);
+
+
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Error")
+                .setMessage("you cant add yourself!")
+                .setPositiveButton("Okay",(dialog, which) -> dialog.dismiss())
                 .show();
     }
 

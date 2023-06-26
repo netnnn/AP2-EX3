@@ -30,4 +30,7 @@ public interface SettingsDao {
     @Query("SELECT `dark mode` FROM Settings LIMIT 1")
     boolean getDarkMode();
 
+    @Query("SELECT 'first init' FROM Settings LIMIT 1")
+    boolean getFirstInit();
+
 }

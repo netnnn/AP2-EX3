@@ -140,26 +140,46 @@ public class LoginActivity extends AppCompatActivity {
         if (url == null){
             url = "http://10.0.2.2:5000";
             boolean darkMode = false;
+            boolean firstInit = true;
 
-            Settings settings = new Settings(url, darkMode);
+            Settings settings = new Settings(url, darkMode, firstInit);
             settingsDao.insert(settings);
         }
 
+
         if (settingsDao.getDarkMode()){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        }else {
+        } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        Settings settings = settingsDao.index();
 
-        User yagami = new User("yagami", "yyy", "Light", R.drawable.yagami);
-        User L = new User("L", "lll", "L", R.drawable.lprofile);
-        User watari = new User("watari", "www", "watari", R.drawable.watari);
-        User misa = new User("misa", "mmm", "misa-misa", R.drawable.misa);
-        User matsuda = new User("matsuda", "mmm", "matsuda", R.drawable.matsuda);
+        if (settings.isFirstInit()) {
+            User yagami = new User("yagami", "yyy", "Light", R.drawable.yagami);
+            User L = new User("L", "lll", "L", R.drawable.lprofile);
+            User watari = new User("watari", "www", "watari", R.drawable.watari);
+            User misa = new User("misa", "mmm", "misa-misa", R.drawable.misa);
+            User matsuda = new User("matsuda", "mmm", "matsuda", R.drawable.matsuda);
 
-        userDao.deleteAll(); //clean
+//            userDao.deleteAll(); //clean
 
-        userDao.insert(yagami, L, watari, misa, matsuda);
+
+            userDao.insert(yagami, L, watari, misa, matsuda);
+
+            easyNewChat(yagami, L);
+            easyNewChat(yagami, misa);
+            easyNewChat(misa, L);
+            easyNewChat(watari, L);
+            easyNewChat(watari, matsuda);
+
+            easyMessage(misa.getUsername(), yagami.getUsername(), "lightttt where are you?");
+            easyMessage(yagami.getUsername(), misa.getUsername(), "im busy now, talk to you later");
+            easyMessage(misa.getUsername(), yagami.getUsername(), "you are always like that!");
+
+            Settings settings1 = settingsDao.index();
+            settings1.setFirstInit(false);
+            settingsDao.update(settings1);
+        }
 
         //LocalData
 //        LocalData.users.add(yagami);
@@ -173,28 +193,21 @@ public class LoginActivity extends AppCompatActivity {
 //        yagami.setPassword("coco");
 //        userDao.update(yagami);
 
-        List<User> userList = appDB.userDao().index();
-        for (User u : userList) {
-            Log.d("users", u.getUsername() + " " + u.getPassword());
-        }
+//        List<User> userList = appDB.userDao().index();
+//        for (User u : userList) {
+//            Log.d("users", u.getUsername() + " " + u.getPassword());
+//        }
 
-        appDB.chatDao().deleteAll(); //clean
+//        appDB.chatDao().deleteAll(); //clean
 
-        easyNewChat(yagami, L);
-        easyNewChat(yagami, misa);
-        easyNewChat(misa, L);
-        easyNewChat(watari, L);
-        easyNewChat(watari, matsuda);
 
-        List<Chat> chatList = appDB.chatDao().index();
+//        List<Chat> chatList = appDB.chatDao().index();
+//
+//        for (Chat c : chatList) {
+//            Log.d("chats", c.getUserOneName() + " " + c.getUserTwoName());
+//        }
 
-        for (Chat c : chatList) {
-            Log.d("chats", c.getUserOneName() + " " + c.getUserTwoName());
-        }
 
-        easyMessage(misa.getUsername(), yagami.getUsername(), "lighttt i want a date!!");
-        easyMessage(yagami.getUsername(), misa.getUsername(), "im too busy for that today, maybe tomorrow?");
-        easyMessage(misa.getUsername(), yagami.getUsername(), "yay! ok, im going to plan it");
 
 
     }

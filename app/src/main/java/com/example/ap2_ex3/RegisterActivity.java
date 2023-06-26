@@ -16,14 +16,12 @@ import android.content.pm.PackageManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,9 +39,9 @@ import java.util.Objects;
 
 
 public class RegisterActivity extends AppCompatActivity {
-//    static byte[] byteArray;
 
-    private Bitmap bitmap;
+
+    static String base64;
     private AppDB appDB;
     private UserDao userDao;
 
@@ -155,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity {
 //                return;
 //            }
 
-            User newUser = new User(username, password, displayName, this.bitmap);
+            User newUser = new User(username, password, displayName, RegisterActivity.base64);
             userDao.insert(newUser);
 
             finish();
@@ -170,7 +168,9 @@ public class RegisterActivity extends AppCompatActivity {
         if (requestCode == CAMERA_REQUEST_CODE && resultCode == RESULT_OK) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             IV.setImageBitmap(photo);
-            this.bitmap = photo;
+            BitmapToStringTask conversionTask = new BitmapToStringTask();
+            conversionTask.execute(photo);
+
 //            new BitmapToByteArrayTask().execute(photo);
 //            this.byteArray = byteArray;
         }
@@ -178,7 +178,10 @@ public class RegisterActivity extends AppCompatActivity {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
             IV.setImageURI(selectedImageUri);
-            this.bitmap = getBitmapFromUri(selectedImageUri);
+            Bitmap bitmap = getBitmapFromUri(selectedImageUri);
+            BitmapToStringTask conversionTask = new BitmapToStringTask();
+            conversionTask.execute(bitmap);
+
 //            if (bitmap != null) {
 //                new BitmapToByteArrayTask().execute(bitmap);
 ////                this.byteArray = byteArray;
@@ -296,19 +299,26 @@ public class RegisterActivity extends AppCompatActivity {
         return null;
     }
 
-//    private class BitmapToByteArrayTask extends AsyncTask<Bitmap, Void, byte[]> {
-//        @Override
-//        protected byte[] doInBackground(Bitmap... bitmaps) {
-//            Bitmap bitmap = bitmaps[0];
-//            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
-//            return outputStream.toByteArray();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(byte[] byteArray) {
-//            RegisterActivity.byteArray = byteArray;
-//        }
-//    }
+    private class BitmapToStringTask extends AsyncTask<Bitmap, Void, String> {
+        @Override
+        protected String doInBackground(Bitmap... bitmaps) {
+            Bitmap bitmap = bitmaps[0];
+
+            // Convert Bitmap to byte array
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+
+            // Convert byte array to Base64 encoded string
+            String encodedString = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+            return encodedString;
+        }
+
+        @Override
+        protected void onPostExecute(String encodedString) {
+            RegisterActivity.base64 = encodedString;
+        }
+    }
 
 }

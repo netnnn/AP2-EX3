@@ -1,6 +1,9 @@
 package com.example.ap2_ex3;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,8 +67,8 @@ public class ChatAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-                this.appDB = AppDB.getDBInstance(parent.getContext());
-                userDao = appDB.userDao();
+        this.appDB = AppDB.getDBInstance(parent.getContext());
+        userDao = appDB.userDao();
 
 
         if (convertView == null) {
@@ -105,7 +108,10 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.timeSent.setText("");//check the toString
         }
         if (friend.getPicture() == 0) {
-            viewHolder.profile.setImageBitmap(friend.getBitmap());
+            String encodedImage = friend.getBase64();
+            byte[] decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            viewHolder.profile.setImageBitmap(bitmap);
         } else {
             viewHolder.profile.setImageResource(friend.getPicture());
         }
