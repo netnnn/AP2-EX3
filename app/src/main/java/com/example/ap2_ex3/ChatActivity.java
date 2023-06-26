@@ -6,9 +6,12 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -27,6 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class ChatActivity extends AppCompatActivity {
     List<Message> messages;
@@ -51,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
 
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea); // Replace `listView` with the ID of your ListView
 
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.chat_action_bar);
 
         ImageView iv = findViewById(R.id.friendProfile);
@@ -66,7 +70,10 @@ public class ChatActivity extends AppCompatActivity {
 
         tv.setText(friend.getDisplayName());
         if (friend.getPicture() == 0){
-            iv.setImageBitmap(friend.getBitmap());
+            String encodedImage = friend.getBase64();
+            byte[] decodedBytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+            iv.setImageBitmap(bitmap);
         } else {
             iv.setImageResource(friend.getPicture());
         }
@@ -76,9 +83,8 @@ public class ChatActivity extends AppCompatActivity {
         //ACTION BAR
         setTitle(friend.getDisplayName());
 
-        int position = intent.getIntExtra("position", 0);
-
-        messages = me.getChatList().get(position).getMsgList();
+        messages = userDao.get(myUsername).findChatWith(friendUserName).getMsgList();
+//        messages = me.getChatList().get(position).getMsgList();
         this.messageAdapter = new MessageAdapter(messages, myUsername);
         lstFeed.setAdapter(messageAdapter);
 
@@ -96,7 +102,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
         sendButton.setOnClickListener(view -> {
-            String friendName = getOtherUser(me.getChatList().get(position), myUsername);
             String[] str = newMsg.getText().toString().split(" ");
             if (str.length == 0 || newMsg.getText().toString().equals("")) {
                 return;
@@ -106,12 +111,12 @@ public class ChatActivity extends AppCompatActivity {
             int offset = (topView == null) ? 0 : (topView.getTop() - lstFeed.getPaddingTop());
 
 
-            easyMessage(myUsername, friendName, newMsg.getText().toString());
+            easyMessage(myUsername, friendUserName, newMsg.getText().toString());
 
             me = userDao.get(myUsername);
 
 //            messageAdapter.notifyDataSetChanged();
-            this.messageViewModel.getMessagesLiveData().setValue(me.getChatList().get(position).getMsgList());
+            this.messageViewModel.getMessagesLiveData().setValue(me.findChatWith(friendUserName).getMsgList());
             newMsg.setText("");
             lstFeed.setSelectionFromTop(currentPosition, offset);
             lstFeed.post(() -> lstFeed.setSelection(lstFeed.getCount() - 1));
