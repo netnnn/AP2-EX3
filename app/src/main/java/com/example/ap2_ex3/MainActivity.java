@@ -31,7 +31,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     AppDB appDB;
-
     UserDao userDao;
     ChatDao chatDao;
 
