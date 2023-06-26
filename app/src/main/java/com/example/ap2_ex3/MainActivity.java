@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         User currentUser = userDao.get(myUsername);
         chats = currentUser.getChatList();
 
+
         if (chats == null) {
             chats = new ArrayList<>();
         }
@@ -182,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
         this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         this.chatsViewModel.getChatsLiveData().setValue(chats);
         this.chatsViewModel.getChatsLiveData().observe(this, data -> {
-                    chatAdapter = new ChatAdapter(data, currentUser);
-                    lstFeed.setAdapter(chatAdapter);
+            chatAdapter = new ChatAdapter(data, currentUser);
+            lstFeed.setAdapter(chatAdapter);
                 }
         );
         lstFeed.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -191,6 +192,13 @@ public class MainActivity extends AppCompatActivity {
             return true; // Consume the long-press event
         });
 
+        //
+        ChatsAPI chatsAPI = new ChatsAPI(this.chatsViewModel.getChatsLiveData(),this.userDao);
+        chatsAPI.getChatsListByName(myUsername);
+
+
+
+        //
 
     }
 
