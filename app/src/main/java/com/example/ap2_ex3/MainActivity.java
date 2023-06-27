@@ -2,6 +2,7 @@ package com.example.ap2_ex3;
 
 import static android.app.PendingIntent.getActivity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.ap2_ex3.Users.UserRegisterReqAndRes;
 import com.google.gson.internal.LinkedTreeMap;
 
 import java.util.ArrayList;
@@ -27,6 +29,17 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+//
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+//
 
 public class MainActivity extends AppCompatActivity {
 
@@ -193,14 +206,43 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //
+
+
         ChatsAPI chatsAPI = new ChatsAPI(this.chatsViewModel.getChatsLiveData(),this.userDao);
-        chatsAPI.getChatsListByName(myUsername);
+//        chatsAPI.getChatsListByName(myUsername);
+        createUser(myUsername);
+
 
 
 
         //
 
     }
+
+    public void createUser(String myName) {
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+        WebServiceAPI webServiceAPI = retrofit.create(WebServiceAPI.class);
+
+
+        webServiceAPI.createUser(new UserRegisterReqAndRes("asa", "asa", "asa", "asa"))
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+
+                        int a = 0;
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        int b = 0;
+
+                    }
+                });
+
+    }
+
 
     void easyNewChat(User a, User b) {
         Chat chat;
