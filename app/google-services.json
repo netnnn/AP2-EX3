@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "507438074947",
+    "project_id": "barmats-web",
+    "storage_bucket": "barmats-web.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507438074947:android:8cd9d7fe88aebb0ab3d8f6",
+        "android_client_info": {
+          "package_name": "com.example.ap2_ex3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507438074947-1v88i97ra95ihh7ltc8r3e1qb7min6k1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBylpdnXdbWRKJuTCgAlGmhjGoYv23_aKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507438074947-1v88i97ra95ihh7ltc8r3e1qb7min6k1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
