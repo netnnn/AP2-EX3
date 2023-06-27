@@ -1,6 +1,6 @@
 package com.example.ap2_ex3.Users;
 
-public class UserRegisterReqAndRes {
+public class UserRegisterReq {
 
     String username, password, displayName, profilePic;
 
@@ -36,7 +36,7 @@ public class UserRegisterReqAndRes {
         this.profilePic = profilePic;
     }
 
-    public UserRegisterReqAndRes(String username, String password, String displayName, String profilePic) {
+    public UserRegisterReq(String username, String password, String displayName, String profilePic) {
         this.username = username;
         this.password = password;
         this.displayName = displayName;

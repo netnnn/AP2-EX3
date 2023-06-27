@@ -1,6 +1,6 @@
 package com.example.ap2_ex3;
 
-import com.example.ap2_ex3.Users.UserRegisterReqAndRes;
+import com.example.ap2_ex3.Users.UserRegisterReq;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import retrofit2.http.Path;
 public interface WebServiceAPI {
 
     @POST("/api/Users")
-    Call<Void> createUser(@Body UserRegisterReqAndRes data);
+    Call<Void> createUser(@Body UserRegisterReq data);
 
     @GET("/api/Users/{username}")
     Call<User> getUser(@Path("username") String username);

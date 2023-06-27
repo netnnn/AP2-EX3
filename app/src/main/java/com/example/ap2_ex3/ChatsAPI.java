@@ -12,10 +12,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import com.example.ap2_ex3.Users.UserRegisterReqAndRes;
-import com.google.gson.Gson;
+import com.example.ap2_ex3.Users.UserRegisterReq;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 
 public class ChatsAPI {
@@ -29,14 +27,16 @@ public class ChatsAPI {
     private WebServiceAPI webServiceAPI;
 
     public ChatsAPI(MutableLiveData<List<Chat>> chatsListData, UserDao userDao) {
-        retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com")
+        retrofit = new Retrofit.Builder().baseUrl("http://192.168.155.211:5000")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
 
         this.userDao = userDao;
         this.chatsListData = chatsListData;
     }
+// 192.168.155.211
 
+    //https://jsonplaceholder.typicode.com
 
     public void getChatsListByName(String myName) {
         String theToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJDaGF0QXBwIiwianRpIjoiM2UzMzU1NWYtM2JiNC00MjM0LTg5MjQtMGMzYmViODJhMzM3IiwiaWF0IjoiMjcvMDYvMjAyMyAxMzoyMDozMyIsIlVzZXJOYW1lIjoiYWFhIiwiZXhwIjoxNjg3ODcyNjMzLCJpc3MiOiJDaGF0U2VydmVyIiwiYXVkIjoiQ2hhdENsaWVudCJ9.m8oYN2DVYFwv6_6p2A2SwUh9a0cX2M3PKt8LGKQhHPU";
@@ -77,16 +77,16 @@ public class ChatsAPI {
     public void createUser(String myName) {
 
 
-        webServiceAPI.getJson()
-                .enqueue(new Callback<JsonExample>() {
+        webServiceAPI.createUser(new UserRegisterReq("asa", "asa", "asa", "asa"))
+                .enqueue(new Callback<Void>() {
                     @Override
-                    public void onResponse(@NonNull Call<JsonExample> call, @NonNull Response<JsonExample> response) {
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
 
                         int a = 0;
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<JsonExample> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
                         int b = 0;
 
                     }
@@ -134,3 +134,20 @@ public class ChatsAPI {
 
     }
 }
+
+
+//////good
+//        webServiceAPI.getJson()
+//                .enqueue(new Callback<JsonExample>() {
+//@Override
+//public void onResponse(@NonNull Call<JsonExample> call, @NonNull Response<JsonExample> response) {
+//
+//        int a = 0;
+//        }
+//
+//@Override
+//public void onFailure(@NonNull Call<JsonExample> call, @NonNull Throwable t) {
+//        int b = 0;
+//
+//        }
+//        });
