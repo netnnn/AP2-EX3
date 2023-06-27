@@ -29,7 +29,7 @@ public class ChatsAPI {
     private WebServiceAPI webServiceAPI;
 
     public ChatsAPI(MutableLiveData<List<Chat>> chatsListData, UserDao userDao) {
-        retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000")
+        retrofit = new Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com")
                 .addConverterFactory(GsonConverterFactory.create()).build();
         webServiceAPI = retrofit.create(WebServiceAPI.class);
 
@@ -74,25 +74,25 @@ public class ChatsAPI {
 
     }
 
-//    public void createUser(String myName) {
-//
-//
-//        webServiceAPI.createUser(new UserRegisterReqAndRes("asa", "asa", "asa", "asa"))
-//                .enqueue(new Callback<Void>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-//
-//                        int a = 0;
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-//                        int b = 0;
-//
-//                    }
-//                });
-//
-//    }
+    public void createUser(String myName) {
+
+
+        webServiceAPI.getJson()
+                .enqueue(new Callback<JsonExample>() {
+                    @Override
+                    public void onResponse(@NonNull Call<JsonExample> call, @NonNull Response<JsonExample> response) {
+
+                        int a = 0;
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<JsonExample> call, @NonNull Throwable t) {
+                        int b = 0;
+
+                    }
+                });
+
+    }
 
 
 

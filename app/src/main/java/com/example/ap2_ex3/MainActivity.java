@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
         ChatsAPI chatsAPI = new ChatsAPI(this.chatsViewModel.getChatsLiveData(),this.userDao);
 //        chatsAPI.getChatsListByName(myUsername);
-        createUser(myUsername);
+        chatsAPI.createUser(myUsername);
 
 
 
@@ -219,29 +219,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void createUser(String myName) {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000")
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        WebServiceAPI webServiceAPI = retrofit.create(WebServiceAPI.class);
-
-
-        webServiceAPI.createUser(new UserRegisterReqAndRes("asa", "asa", "asa", "asa"))
-                .enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-
-                        int a = 0;
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                        int b = 0;
-
-                    }
-                });
-
-    }
 
 
     void easyNewChat(User a, User b) {

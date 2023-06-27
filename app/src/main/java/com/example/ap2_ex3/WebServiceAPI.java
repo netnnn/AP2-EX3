@@ -52,4 +52,7 @@ public interface WebServiceAPI {
     @POST("/api/Tokens")
     Call<String> getToken(@Path("name") String name);
 
+
+    @GET("/todos/1")
+    Call<JsonExample> getJson();
 }
