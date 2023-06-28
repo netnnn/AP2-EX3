@@ -153,7 +153,10 @@ public class RegisterActivity extends AppCompatActivity {
 //                return;
 //            }
 
+            ApiRequests apiRequests = new ApiRequests();
             User newUser = new User(username, password, displayName, RegisterActivity.base64);
+
+            apiRequests.createUser(newUser);
             userDao.insert(newUser);
 
             finish();

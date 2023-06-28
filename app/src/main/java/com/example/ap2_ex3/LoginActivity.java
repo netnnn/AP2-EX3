@@ -102,14 +102,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return;
             }
-            for (User user : userDao.index()) {
-                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                    Intent intent = new Intent(this, MainActivity.class);
-                    intent.putExtra("user", username);
-                    startActivity(intent);
-                    return;
-                }
-            }
+
+            ApiRequests apiRequests = new ApiRequests();
+            apiRequests.getToken(username, password);
+
+
+//            for (User user : userDao.index()) {
+//                if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
+//                    Intent intent = new Intent(this, MainActivity.class);
+//                    intent.putExtra("user", username);
+//                    startActivity(intent);
+//                    return;
+//                }
+//            }
 
             Dialog dialog = new Dialog(this);
             dialog.setContentView(R.layout.dialog_register_error);

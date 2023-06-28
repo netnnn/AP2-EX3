@@ -1,6 +1,9 @@
 package com.example.ap2_ex3;
 
-import com.example.ap2_ex3.Users.UserRegisterReq;
+import com.example.ap2_ex3.Chats.ChatData;
+import com.example.ap2_ex3.Chats.ChatTileData;
+import com.example.ap2_ex3.Messages.MsgData;
+import com.example.ap2_ex3.Users.GetUserRes;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -15,44 +18,31 @@ import retrofit2.http.Path;
 
 public interface WebServiceAPI {
 
-    @POST("/api/Users")
-    Call<Void> createUser(@Body UserRegisterReq data);
+    @POST("/api/Users")//V
+    Call<Void> createUser(@Body JsonObject data);
 
-    @GET("/api/Users/{username}")
-    Call<User> getUser(@Path("username") String username);
+    @GET("/api/Users/{username}")//V
+    Call<GetUserRes> getUser(@Path("username") String username, @Header("Authorization") String authToken);
 
-    @POST("/api/Tokens")
-    Call<String> getToken(User user);
+    @POST("/api/Tokens")//V
+    Call<String> createToken(@Body JsonObject requestBody);
 
-//    @GET("api/Chats")
-//    Call<List<Chat>> getAllMyChats();
+    @GET("/api/Chats")//V
+    Call<List<ChatTileData>> getChats(@Header("Authorization") String authToken);
 
-    @GET("/api/Chats")
-    Call<List<NewChat>> getChats(@Header("Authorization") String authToken);
-
-    @POST("/api/Tokens")
-    Call<JsonObject> createToken(@Body JsonObject requestBody);
-
-    @POST("/api/Chats")
-    Call<Void> createChat(Chat chat);
+    @POST("/api/Chats")//V
+    Call<Void> createChat(@Body JsonObject requestBody, @Header("Authorization") String authToken);
 
     @GET("/api/Chats/{id}")
-    Call<Chat> getChatById(@Path("id") int id);
+    Call<ChatData> getChatById(@Path("id") int id, @Header("Authorization") String authToken);
 
-    @DELETE("/api/Chats/{id}")
-    Call<Void> deleteChatById(@Path("id") int id);
+    @DELETE("/api/Chats/{id}")//V
+    Call<Void> deleteChatById(@Path("id") int id, @Header("Authorization") String authToken);
 
-    @POST("/api/Chats/{id}/Messages")
-    Call<Message> sendMessage(@Path("id") int id, Message message);
+    @POST("/api/Chats/{id}/Messages")//V
+    Call<MsgData> sendMessage(@Path("id") int id, @Body JsonObject requestBody , @Header("Authorization") String authToken);
 
-    @GET("/api/Chats/{id}/Messages")
-    Call<List<Message>> getAllMessages(@Path("id") int id);
+    @GET("/api/Chats/{id}/Messages")//V
+    Call<List<MsgData>> getAllMessages(@Path("id") int id, @Header("Authorization") String authToken);
 
-
-    @POST("/api/Tokens")
-    Call<String> getToken(@Path("name") String name);
-
-
-    @GET("/todos/1")
-    Call<JsonExample> getJson();
 }
