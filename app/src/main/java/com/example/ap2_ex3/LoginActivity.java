@@ -35,9 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     ChatDao chatDao;
     SettingsDao settingsDao;
 
-    private static final int CAMERA_REQUEST_CODE = 1001;
-    private static final int GALLERY_REQUEST_CODE = 1002;
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -71,11 +68,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         initialize();
 
 
-//        LocalData.initialize();
 
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.Login_title);
@@ -107,6 +102,12 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 return;
             }
+
+            ApiRequests apiRequests = new ApiRequests();
+            apiRequests.getToken(username, password);
+
+
+
             for (User user : userDao.index()) {
                 if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                     Intent intent = new Intent(this, MainActivity.class);

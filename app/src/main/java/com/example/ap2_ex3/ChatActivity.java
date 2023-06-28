@@ -53,6 +53,10 @@ public class ChatActivity extends AppCompatActivity {
         chatDao = appDB.chatDao();
         messageDao = appDB.messageDao();
 
+        //
+
+        //
+
         ListView lstFeed = (ListView) findViewById(R.id.myMessagesArea); // Replace `listView` with the ID of your ListView
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

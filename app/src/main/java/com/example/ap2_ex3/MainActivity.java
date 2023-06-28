@@ -5,33 +5,29 @@ import static android.app.PendingIntent.getActivity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Room;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.gson.internal.LinkedTreeMap;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+//
+
+//
 
 public class MainActivity extends AppCompatActivity {
 
     AppDB appDB;
-
     UserDao userDao;
     ChatDao chatDao;
 
@@ -172,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         User currentUser = userDao.get(myUsername);
         chats = currentUser.getChatList();
 
+
         if (chats == null) {
             chats = new ArrayList<>();
         }
@@ -183,8 +180,8 @@ public class MainActivity extends AppCompatActivity {
         this.chatsViewModel = new ViewModelProvider(this).get(ChatsViewModel.class);
         this.chatsViewModel.getChatsLiveData().setValue(chats);
         this.chatsViewModel.getChatsLiveData().observe(this, data -> {
-                    chatAdapter = new ChatAdapter(data, currentUser);
-                    lstFeed.setAdapter(chatAdapter);
+            chatAdapter = new ChatAdapter(data, currentUser);
+            lstFeed.setAdapter(chatAdapter);
                 }
         );
         lstFeed.setOnItemLongClickListener((parent, view, position, id) -> {
@@ -192,8 +189,25 @@ public class MainActivity extends AppCompatActivity {
             return true; // Consume the long-press event
         });
 
+        //
+
+
+        ChatsAPI chatsAPI = new ChatsAPI(this.chatsViewModel.getChatsLiveData(),this.userDao);
+
+//        chatsAPI.createUser();
+
+
+
+
+
+
+
+        //
 
     }
+
+
+
 
     void easyNewChat(User a, User b) {
         Chat chat;
