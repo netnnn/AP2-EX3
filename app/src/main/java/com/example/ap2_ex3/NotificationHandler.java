@@ -24,6 +24,10 @@ public class NotificationHandler extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
         if (remoteMessage.getNotification() != null) {
+
+            //NEED TO UPDATE VIEWMODELS ACCORDING TO NEW DATA GIVEN FROM REMOTE MESSAGE
+
+            //POSTING THE NOTIFICATION ON THE PHONE
             createNotificationChannel();
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1")
