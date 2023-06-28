@@ -3,6 +3,7 @@ package com.example.ap2_ex3;
 import com.example.ap2_ex3.Chats.ChatData;
 import com.example.ap2_ex3.Chats.ChatTileData;
 import com.example.ap2_ex3.Messages.MsgData;
+import com.example.ap2_ex3.Tokens.TokenRes;
 import com.example.ap2_ex3.Users.GetUserRes;
 import com.google.gson.JsonObject;
 
@@ -25,7 +26,7 @@ public interface WebServiceAPI {
     Call<GetUserRes> getUser(@Path("username") String username, @Header("Authorization") String authToken);
 
     @POST("/api/Tokens")//V
-    Call<String> createToken(@Body JsonObject requestBody);
+    Call<TokenRes> createToken(@Body JsonObject requestBody);
 
     @GET("/api/Chats")//V
     Call<List<ChatTileData>> getChats(@Header("Authorization") String authToken);

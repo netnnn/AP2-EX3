@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.example.ap2_ex3.Chats.ChatData;
 import com.example.ap2_ex3.Chats.ChatTileData;
 import com.example.ap2_ex3.Messages.MsgData;
+import com.example.ap2_ex3.Tokens.TokenRes;
 import com.example.ap2_ex3.Users.GetUserRes;
 import com.google.gson.JsonObject;
 
@@ -81,15 +82,15 @@ public class ApiRequests {
         requestBody.addProperty("password", password);
 
         webServiceAPI.createToken(requestBody)
-                .enqueue(new Callback<String>() {
+                .enqueue(new Callback<TokenRes>() {
                     @Override
-                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                        String s = response.body();
+                    public void onResponse(@NonNull Call<TokenRes> call, @NonNull Response<TokenRes> response) {
+                        TokenRes s = response.body();
                         int a = 0;
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<TokenRes> call, @NonNull Throwable t) {
                         int b = 0;
 
                     }

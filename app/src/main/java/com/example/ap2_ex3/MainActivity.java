@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
 
         ChatsAPI chatsAPI = new ChatsAPI(this.chatsViewModel.getChatsLiveData(),this.userDao);
 
-//        chatsAPI.getChatsListByName(myUsername);
+//        chatsAPI.createUser();
 
 
 

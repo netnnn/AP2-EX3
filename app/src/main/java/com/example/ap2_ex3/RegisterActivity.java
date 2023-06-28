@@ -149,9 +149,9 @@ public class RegisterActivity extends AppCompatActivity {
             String verifyPassword = verifyET.getText().toString();
             String displayName = DisplayNameEt.getText().toString();
 
-//            if (!validate()) {
-//                return;
-//            }
+            if (!validate()) {
+                return;
+            }
 
             ApiRequests apiRequests = new ApiRequests();
             User newUser = new User(username, password, displayName, RegisterActivity.base64);

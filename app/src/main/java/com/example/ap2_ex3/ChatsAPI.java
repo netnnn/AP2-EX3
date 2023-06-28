@@ -71,30 +71,30 @@ public class ChatsAPI {
 //
 //    }
 
-//    public void createUser(String myName) {
-//        JsonObject requestBody = new JsonObject();
-//        requestBody.addProperty("username", "ada");
-//        requestBody.addProperty("password", "ada");
-//        requestBody.addProperty("displayName", "ada");
-//        requestBody.addProperty("profilePic", "ada");
-//
-//
-//        webServiceAPI.createUser(requestBody)
-//                .enqueue(new Callback<Void>() {
-//                    @Override
-//                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-//
-//                        int a = 0;
-//                    }
-//
-//                    @Override
-//                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-//                        int b = 0;
-//
-//                    }
-//                });
-//
-//    }
+    public void createUser() {
+        JsonObject requestBody = new JsonObject();
+        requestBody.addProperty("username", "adda");
+        requestBody.addProperty("password", "ada");
+        requestBody.addProperty("displayName", "ada");
+        requestBody.addProperty("profilePic", "ada");
+
+
+        webServiceAPI.createUser(requestBody)
+                .enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+
+                        int a = 0;
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                        int b = 0;
+
+                    }
+                });
+
+    }
 
 
 
